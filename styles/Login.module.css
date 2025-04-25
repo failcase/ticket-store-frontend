@@ -25,9 +25,14 @@
   margin-bottom: 0.25rem;
 }
 
+.required {
+  color: var(--error);
+  margin-left: 0.25rem;
+}
+
 .input {
   width: 100%;
-  box-sizing: border-box;    /* <-- важно */
+  box-sizing: border-box;
   padding: 0.5rem;
   background-color: var(--bg);
   color: var(--fg);

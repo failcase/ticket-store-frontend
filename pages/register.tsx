@@ -39,7 +39,7 @@ export default function Register() {
       if (!res.ok) {
         throw new Error(data.detail || JSON.stringify(data))
       }
-      // Перенаправляем на логин с флагом
+      // при успехе переходим на логин
       router.push({ pathname: '/login', query: { registered: '1' } })
     } catch (err: any) {
       setError(err.message)
@@ -53,9 +53,10 @@ export default function Register() {
       <main className={styles.container}>
         <h1 className={styles.title}>Регистрация</h1>
         <form onSubmit={handleSubmit}>
-          {/* Username */}
           <div className={styles.field}>
-            <label className={styles.label}>Username</label>
+            <label className={styles.label}>
+              Username<span className={styles.required}>*</span>
+            </label>
             <input
               name="username"
               className={styles.input}
@@ -66,9 +67,10 @@ export default function Register() {
             />
           </div>
 
-          {/* Email */}
           <div className={styles.field}>
-            <label className={styles.label}>Email</label>
+            <label className={styles.label}>
+              Email<span className={styles.required}>*</span>
+            </label>
             <input
               name="email"
               className={styles.input}
@@ -79,9 +81,10 @@ export default function Register() {
             />
           </div>
 
-          {/* Имя */}
           <div className={styles.field}>
-            <label className={styles.label}>Имя</label>
+            <label className={styles.label}>
+              Имя<span className={styles.required}>*</span>
+            </label>
             <input
               name="first_name"
               className={styles.input}
@@ -92,9 +95,10 @@ export default function Register() {
             />
           </div>
 
-          {/* Фамилия */}
           <div className={styles.field}>
-            <label className={styles.label}>Фамилия</label>
+            <label className={styles.label}>
+              Фамилия
+            </label>
             <input
               name="last_name"
               className={styles.input}
@@ -104,9 +108,10 @@ export default function Register() {
             />
           </div>
 
-          {/* Пароль */}
           <div className={styles.field}>
-            <label className={styles.label}>Пароль</label>
+            <label className={styles.label}>
+              Пароль<span className={styles.required}>*</span>
+            </label>
             <input
               name="password1"
               className={styles.input}
@@ -117,9 +122,10 @@ export default function Register() {
             />
           </div>
 
-          {/* Повтор пароля */}
           <div className={styles.field}>
-            <label className={styles.label}>Повторите пароль</label>
+            <label className={styles.label}>
+              Повторите пароль<span className={styles.required}>*</span>
+            </label>
             <input
               name="password2"
               className={styles.input}
