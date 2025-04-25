@@ -12,7 +12,6 @@
   font-weight: 600;
   font-size: 1.25rem;
   color: var(--primary);
-  text-decoration: none;
 }
 
 .links {
@@ -21,45 +20,30 @@
   gap: 1.5rem;
 }
 
-/* Вход */
 .link {
   font-weight: 500;
   font-size: 1rem;
   color: var(--fg);
   transition: color 0.2s;
 }
+
 .link:hover {
   color: var(--primary);
 }
 
-/* Профиль */
 .profileMenu {
   position: relative;
 }
 
-/* область-активатор */
-.trigger {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  cursor: pointer;
-}
-
 .avatar {
   width: 32px;
-  aspect-ratio: 1/1;
-  border-radius: 8px;
+  aspect-ratio: 1 / 1;
   object-fit: cover;
+  border-radius: 50%;
+  cursor: pointer;
   border: 1px solid var(--border);
 }
 
-.name {
-  font-size: 0.95rem;
-  color: var(--fg);
-  font-weight: 500;
-}
-
-/* выпадашка */
 .dropdown {
   position: absolute;
   right: 0;
@@ -68,52 +52,30 @@
   border: 1px solid var(--border);
   border-radius: 6px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  display: flex;
+  flex-direction: column;
+  min-width: 160px;
   overflow: hidden;
-  min-width: 200px;
   z-index: 10;
 }
 
-/* шапка */
-.dropdownHeader {
-  padding: 0.75rem 1rem;
-}
-.fullName {
-  display: block;
-  font-size: 1rem;
-  color: var(--fg);
-}
-.userTag {
-  display: block;
-  font-size: 0.85rem;
-  color: var(--fg-secondary);
-  margin-top: 0.25rem;
-}
-
-/* разделитель */
-.divider {
-  height: 1px;
-  background: var(--border);
-  margin: 0.25rem 0;
-}
-
-/* элемент меню */
-.item {
-  display: block;
-  width: 100%;
-  padding: 0.75rem 1rem;
+.dropdown a,
+.dropdown button {
+  padding: 0.75rem 1.25rem;
   font-size: 0.95rem;
   color: var(--fg);
   background: none;
   border: none;
   text-align: left;
+  width: 100%;
   cursor: pointer;
-  text-decoration: none;
-}
-.item:hover {
-  background: var(--border);
 }
 
-/* тема */
+.dropdown a:hover,
+.dropdown button:hover {
+  background-color: var(--border);
+}
+
 .themeToggle {
   background: none;
   border: none;
