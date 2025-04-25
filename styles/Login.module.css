@@ -1,0 +1,52 @@
+.container {
+  max-width: 400px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background-color: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  box-shadow: 0 1px 3px rgba(27,31,35,0.15);
+}
+
+.title {
+  margin-bottom: 1.5rem;
+  font-size: 1.5rem;
+  color: var(--fg);
+}
+
+.field {
+  margin-bottom: 1rem;
+}
+
+.label {
+  display: block;
+  font-size: 0.9rem;
+  color: var(--fg-secondary);
+  margin-bottom: 0.25rem;
+}
+
+.input {
+  width: 100%;
+  box-sizing: border-box;    /* <-- важно */
+  padding: 0.5rem;
+  background-color: var(--bg);
+  color: var(--fg);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+}
+
+.error {
+  color: var(--error);
+  margin-bottom: 1rem;
+}
+
+.submit {
+  width: 100%;
+  padding: 0.6rem;
+  background-color: var(--primary);
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+}

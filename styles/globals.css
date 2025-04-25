@@ -1,17 +1,64 @@
+html {
+  box-sizing: border-box;
+}
+*, *::before, *::after {
+  box-sizing: inherit;
+}
+
+/* Далее ваш существующий код */
+:root {
+  --bg: #fff;
+  /* ... */
+}
+.dark {
+  --bg: #0d1117;
+  /* ... */
+}
+
+:root {
+  --bg: #fff;
+  --fg: #24292e;
+  --fg-secondary: #57606a;
+  --card-bg: #fff;
+  --border: #e1e4e8;
+  --primary: #2da44e;
+  --error: #cf222e;
+}
+
+.dark {
+  --bg: #0d1117;
+  --fg: #c9d1d9;
+  --fg-secondary: #8b949e;
+  --card-bg: #161b22;
+  --border: #30363d;
+  --primary: #58a6ff;
+}
+
 body {
   margin: 0;
   padding: 0;
   font-family: 'Inter', sans-serif;
-  background-color: #f9f9f9;
-  color: #1e1e1e;
+  background-color: var(--bg);
+  color: var(--fg);
+  transition: background-color 0.3s, color 0.3s;
 }
 
 a {
-  color: inherit;
+  color: var(--primary);
   text-decoration: none;
 }
 
 button {
   font-family: inherit;
   cursor: pointer;
+}
+
+
+#nprogress .bar {
+  height: 2px;
+  background: var(--primary) !important;
+}
+
+#nprogress .peg {
+  box-shadow: 0 0 8px var(--primary), 0 0 4px var(--primary) !important;
 }

@@ -1,25 +1,123 @@
 .navbar {
+  height: 64px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem 2rem;
-  background-color: #ffffff;
-  border-bottom: 1px solid #eaeaea;
+  padding: 0 1.5rem;
+  background-color: var(--card-bg);
+  border-bottom: 1px solid var(--border);
 }
 
 .logo {
-  font-weight: 700;
-  font-size: 1.5rem;
-  color: #0db7ed;
+  font-weight: 600;
+  font-size: 1.25rem;
+  color: var(--primary);
+  text-decoration: none;
 }
 
-.links a {
-  margin-left: 1.5rem;
+.links {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+/* Вход */
+.link {
   font-weight: 500;
-  color: #1e1e1e;
-  transition: color 0.3s;
+  font-size: 1rem;
+  color: var(--fg);
+  transition: color 0.2s;
+}
+.link:hover {
+  color: var(--primary);
 }
 
-.links a:hover {
-  color: #0db7ed;
+/* Профиль */
+.profileMenu {
+  position: relative;
+}
+
+/* область-активатор */
+.trigger {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+}
+
+.avatar {
+  width: 32px;
+  aspect-ratio: 1/1;
+  border-radius: 8px;
+  object-fit: cover;
+  border: 1px solid var(--border);
+}
+
+.name {
+  font-size: 0.95rem;
+  color: var(--fg);
+  font-weight: 500;
+}
+
+/* выпадашка */
+.dropdown {
+  position: absolute;
+  right: 0;
+  top: 64px;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  overflow: hidden;
+  min-width: 200px;
+  z-index: 10;
+}
+
+/* шапка */
+.dropdownHeader {
+  padding: 0.75rem 1rem;
+}
+.fullName {
+  display: block;
+  font-size: 1rem;
+  color: var(--fg);
+}
+.userTag {
+  display: block;
+  font-size: 0.85rem;
+  color: var(--fg-secondary);
+  margin-top: 0.25rem;
+}
+
+/* разделитель */
+.divider {
+  height: 1px;
+  background: var(--border);
+  margin: 0.25rem 0;
+}
+
+/* элемент меню */
+.item {
+  display: block;
+  width: 100%;
+  padding: 0.75rem 1rem;
+  font-size: 0.95rem;
+  color: var(--fg);
+  background: none;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+  text-decoration: none;
+}
+.item:hover {
+  background: var(--border);
+}
+
+/* тема */
+.themeToggle {
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  color: var(--fg);
 }

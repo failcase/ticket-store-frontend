@@ -1,0 +1,140 @@
+.container {
+  display: flex;
+  gap: 2rem;
+  max-width: 1024px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+
+.leftColumn {
+  flex: 0 0 280px;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.avatarBox {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 1rem;
+  text-align: center;
+  /* фиксируем ширину левой колонки, если надо */
+  width: 100%;
+  max-width: 280px;
+}
+
+/* Аватар теперь заполняет весь контейнер и остаётся квадратным */
+.avatarBox img {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  border-radius: 8px;
+  object-fit: cover;
+  display: block;
+  margin: 0 auto;
+}
+
+/* Кнопка остаётся на всю ширину .avatarBox */
+.avatarBox button {
+  margin-top: 1rem;
+  width: 100%;
+  padding: 0.6rem;
+  background: var(--primary);
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.passwordBox,
+.aboutBox {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 1rem;
+}
+
+.passwordBox h2,
+.aboutBox h2 {
+  margin: 0 0 0.75rem;
+  font-size: 1.1rem;
+  color: var(--fg);
+}
+
+.passwordBox input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0.5rem;
+  margin-bottom: 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: var(--bg);
+  color: var(--fg);
+}
+
+.passwordBox button {
+  width: 100%;
+  padding: 0.6rem;
+  background: var(--primary);
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.aboutBox p {
+  margin: 0;
+  font-size: 0.95rem;
+  color: var(--fg-secondary);
+  line-height: 1.5;
+}
+
+.rightColumn {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.profileForm {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 1rem;
+}
+
+.profileForm h2 {
+  margin: 0 0 1rem;
+  font-size: 1.25rem;
+  color: var(--fg);
+}
+
+.field {
+  margin-bottom: 1rem;
+}
+
+.field label {
+  display: block;
+  font-size: 0.9rem;
+  color: var(--fg-secondary);
+  margin-bottom: 0.25rem;
+}
+
+.field input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0.5rem;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: var(--bg);
+  color: var(--fg);
+}
+
+.profileForm button {
+  padding: 0.6rem 1.2rem;
+  background: var(--primary);
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}

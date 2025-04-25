@@ -1,46 +1,66 @@
-import { useState } from 'react';
-import Navbar from '../components/Navbar';
+// pages/login.tsx
+import { useState } from 'react'
+import Navbar from '../components/Navbar'
+import styles from '@/styles/Login.module.css'
+
+const API_URL = process.env.NEXT_PUBLIC_API_URL!
 
 export default function Login() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
+  const [error, setError] = useState('')
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    console.log('Логин:', email, password);
-  };
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setError('')
+    try {
+      const res = await fetch(`${API_URL}/api/token`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password }),
+      })
+      if (!res.ok) throw new Error('Неверные учетные данные')
+      const { access, refresh } = await res.json()
+      localStorage.setItem('access', access)
+      localStorage.setItem('refresh', refresh)
+      window.location.href = '/profile'
+    } catch (err: any) {
+      setError(err.message)
+    }
+  }
 
   return (
     <>
       <Navbar />
-      <main style={{ padding: '2rem', maxWidth: '400px', margin: '0 auto' }}>
-        <h1>Вход</h1>
+      <main className={styles.container}>
+        <h1 className={styles.title}>Вход</h1>
         <form onSubmit={handleSubmit}>
-          <div style={{ marginBottom: '1rem' }}>
-            <label>Email:</label><br />
+          <div className={styles.field}>
+            <label className={styles.label}>Username</label>
             <input
-              type="email"
-              value={email}
-              onChange={e => setEmail(e.target.value)}
+              className={styles.input}
+              type="text"
+              value={username}
+              onChange={e => setUsername(e.target.value)}
               required
-              style={{ width: '100%', padding: '0.5rem', marginTop: '0.5rem' }}
             />
           </div>
-          <div style={{ marginBottom: '1rem' }}>
-            <label>Пароль:</label><br />
+          <div className={styles.field}>
+            <label className={styles.label}>Пароль</label>
             <input
+              className={styles.input}
               type="password"
               value={password}
               onChange={e => setPassword(e.target.value)}
               required
-              style={{ width: '100%', padding: '0.5rem', marginTop: '0.5rem' }}
             />
           </div>
-          <button type="submit" style={{ padding: '0.5rem 1rem', backgroundColor: '#0db7ed', color: '#fff', border: 'none', borderRadius: '4px' }}>
+          {error && <p className={styles.error}>{error}</p>}
+          <button type="submit" className={styles.submit}>
             Войти
           </button>
         </form>
       </main>
     </>
-  );
+  )
 }
