@@ -1,0 +1,16 @@
+/* Обёртка для центрирования и отступа снизу */
+.wrapper {
+  width: 100%;
+  max-width: 1024px;
+  margin: 0 auto 2rem;  /* 2rem отступ снизу перед остальным контентом */
+}
+
+/* картинка обрезается по высоте */
+.image {
+  width: 100%;
+  height: 312px;
+  display: block;
+  object-fit: cover; /* обрезка по высоте */
+  object-position: center; /* центрирование картинки */
+  border-radius: 8px;   /* скругление краёв, можно убрать */
+}
