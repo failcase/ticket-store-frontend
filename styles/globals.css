@@ -1,6 +1,24 @@
 html {
   box-sizing: border-box;
 }
+
+html, body, #__next {
+  height: 100%;
+  margin: 0;
+}
+
+/* сама обёртка: flex-колонка, минимум 100vh */
+.app-wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* основная зона контента тянется, «выталкивая» футер вниз */
+.app-content {
+  flex: 1;
+}
+
 *, *::before, *::after {
   box-sizing: inherit;
 }

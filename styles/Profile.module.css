@@ -1,78 +1,171 @@
 /* styles/Profile.module.css */
 
+/* Общий контейнер */
 .container {
   display: flex;
-  gap: 2rem;
+  gap: 1.5rem;
   max-width: 1024px;
-  margin: 2rem auto;
-  padding: 0 1rem;
+  margin: 1.5rem auto;
+  padding: 0 1.5rem;
   flex-wrap: wrap;
 }
+@media (max-width: 768px) {
+  .container {
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 0 1.5rem;
+  }
+}
 
+/* Колонки */
 .leftColumn {
   flex: 0 0 280px;
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 0.75rem;
+}
+.rightColumn {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
 }
 
+/* Аватар */
 .avatarBox {
+  position: relative;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  overflow: hidden;
+  cursor: pointer;
+}
+.avatarBox img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+}
+
+/* Оверлей с карандашиком */
+.avatarOverlay {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.2);
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+.avatarBox:hover .avatarOverlay {
+  opacity: 1;
+}
+/* Круглый фон + маска SVG */
+.avatarOverlayIcon {
+  width: 2.5rem;
+  height: 2.5rem;
+  background-color: var(--card-bg);
+  mask: url('/pencil.svg') no-repeat center center;
+  -webkit-mask: url('/pencil.svg') no-repeat center center;
+  mask-size: contain;
+  -webkit-mask-size: contain;
+  border-radius: 50%;
+}
+
+/* Блок информации под аватаром */
+.infoBox {
   background: var(--card-bg);
   border: 1px solid var(--border);
   border-radius: 6px;
   padding: 1rem;
-  text-align: center;
-  width: 100%;
+}
+.fullName {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--fg);
+  margin-bottom: 0.5rem;
+  line-height: 1.2;
+}
+.usernameText {
+  font-size: 1rem;
+  color: var(--fg-secondary);
+  margin-bottom: 0.75rem;
+  line-height: 1.4;
+}
+.emailRow {
+  display: flex;
+  align-items: center;
+  color: var(--fg-secondary);
+  margin-bottom: 0.75rem;
+  line-height: 1.4;
+}
+.emailIcon {
+  margin-right: 0.5rem;
+  font-size: 1rem;
 }
 
-.avatarBox img {
+/* Кнопка «Редактировать профиль» / «Назад» */
+.editButton,
+.backButton {
+  display: block;
   width: 100%;
-  aspect-ratio: 1/1;
-  object-fit: cover;
-  border-radius: 8px;
-  margin: 0 auto;
-}
-
-.avatarBox button {
-  margin-top: 1rem;
-  width: 100%;
-  padding: 0.6rem;
+  padding: 0.5rem 1rem;
   background: var(--primary);
   color: #fff;
   border: none;
-  border-radius: 4px;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  text-align: center;
   cursor: pointer;
+  transition: background 0.2s;
+  text-decoration: none;
+}
+.editButton:hover,
+.backButton:hover {
+  background: #24943f;
 }
 
-/* Форма смены пароля (в личном профиле) */
-.passwordBox {
+/* Общие стили форм */
+.profileForm,
+.passwordBox,
+.emailBox {
   background: var(--card-bg);
   border: 1px solid var(--border);
   border-radius: 6px;
   padding: 1rem;
+  margin-bottom: 0.75rem;
+}
+@media (max-width: 768px) {
+  .profileForm,
+  .passwordBox,
+  .emailBox {
+    padding: 0.75rem;
+  }
 }
 
-.passwordBox h2 {
+/* Заголовки форм */
+.profileForm h2,
+.passwordBox h2,
+.emailBox h2 {
   margin: 0 0 1rem;
-  font-size: 1.1rem; /* совпадает с profileForm h2 */
+  font-size: 1.1rem;
   color: var(--fg);
 }
 
+/* Поля в формах */
 .field {
-  margin-bottom: 1rem;
+  margin-bottom: 0.5rem;
 }
-
 .field label {
   display: block;
   font-size: 0.9rem;
   color: var(--fg-secondary);
   margin-bottom: 0.25rem;
 }
-
 .field input,
 .field textarea {
   width: 100%;
-  box-sizing: border-box;
   padding: 0.5rem;
   border: 1px solid var(--border);
   border-radius: 4px;
@@ -80,85 +173,60 @@
   color: var(--fg);
 }
 
-.field input:disabled {
-  /* disabled inputs выглядят так же, как в форме редактирования */
-  background: var(--bg);
-  color: var(--fg);
-  cursor: not-allowed;
+/* Две колонки для пароля */
+.passwordRow {
+  display: flex;
+  gap: 1rem;
+}
+.passwordRow .field {
+  flex: 1;
+}
+@media (max-width: 768px) {
+  .passwordRow {
+    flex-direction: column;
+  }
 }
 
-/* Кнопка смены пароля */
-.passwordBox button {
-  display: block;
-  margin-top: 1rem;
-  padding: 0.6rem 1.2rem;
-  background: var(--primary);
+/* Обязательные поля */
+.required {
+  color: var(--error);
+  margin-left: 0.25rem;
+}
+
+/* Кнопки внутри форм */
+.profileForm button,
+.passwordBox button,
+.emailBox button {
+  padding: 0.5rem 1rem;
+  background: #28a745;
   color: #fff;
   border: none;
-  border-radius: 4px;
+  border-radius: 6px;
   cursor: pointer;
-}
-
-/* Уведомления */
-.error {
-  color: var(--error);
-  margin-top: 0.5rem;
-  margin-bottom: 1rem;
   font-size: 0.95rem;
+  min-width: 120px;
+  align-self: flex-start;
+  margin-top: 1rem;
+  transition: background 0.2s;
+}
+.profileForm button:hover,
+.passwordBox button:hover,
+.emailBox button:hover {
+  background: #218838;
 }
 
+/* Сообщения */
 .successMessage {
-  padding: 0.75rem 1rem;
+  padding: 0.5rem 1rem;
   background: #28a745;
   color: #fff;
   border-radius: 4px;
-  font-size: 0.95rem;
-  margin-bottom: 1rem;
+  font-size: 0.9rem;
+  margin-bottom: 0.5rem;
 }
-
-/* Информация чужого профиля */
-.infoBox {
-  background: var(--card-bg);
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  padding: 1rem;
-}
-
-.infoBox h2 {
-  margin: 0 0 1rem;
-  font-size: 1.1rem; /* тот же, что и у profileForm h2 */
-  color: var(--fg);
-}
-
-/* Правая колонка */
-.rightColumn {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-}
-
-/* Форма редактирования */
-.profileForm {
-  background: var(--card-bg);
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  padding: 1rem;
-}
-
-.profileForm h2 {
-  margin: 0 0 1rem;
-  font-size: 1.1rem;
-  color: var(--fg);
-}
-
-.profileForm button {
-  display: block;
-  margin-top: 1rem;
-  padding: 0.6rem 1.2rem;
-  background: var(--primary);
-  color: #fff;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
+.error {
+  color: var(--error);
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
 }
