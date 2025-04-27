@@ -1,3 +1,5 @@
+// pages/org/create.tsx
+
 import { useState, ChangeEvent, FormEvent } from 'react'
 import { useRouter } from 'next/router'
 import { useTranslation } from 'next-i18next'
@@ -37,12 +39,10 @@ export default function OrgCreatePage() {
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault()
     setError(null)
-
     if (!/^[A-Za-z0-9.\-]+$/.test(slugInput)) {
       setError(t('orgCreateSlugHelp'))
       return
     }
-
     setLoading(true)
     try {
       const formData = new FormData()
@@ -50,13 +50,12 @@ export default function OrgCreatePage() {
       formData.append('slug', slugInput)
       formData.append('description', description)
       if (logoFile) formData.append('logo', logoFile)
-
       const res = await authFetch(`${API_URL}/api/org`, {
         method: 'POST',
         body: formData,
       })
       if (!res.ok) {
-        const data = await res.json()
+        const data = await res.json().catch(() => ({}))
         throw new Error(data.detail || t('orgCreateError'))
       }
       const created = await res.json()
@@ -72,22 +71,49 @@ export default function OrgCreatePage() {
     <>
       <Navbar />
       <main className={orgStyles.container}>
-        {/* Preview */}
         <div className={orgStyles.leftColumn}>
-          <div className={orgStyles.avatarBox}>
+          {/* Clickable logo upload */}
+          <label
+            htmlFor="logo-upload"
+            className={`${orgStyles.avatarBox} ${profileStyles.avatarBox}`}
+          >
             <img
               src={logoPreview || DEFAULT_LOGO}
               alt={t('logoPreview')}
               onError={e => { e.currentTarget.src = DEFAULT_LOGO }}
             />
+            <div className={profileStyles.avatarOverlay}>
+              <img
+                src="/pencil.svg"
+                alt={t('orgCreateLogo')}
+                className={profileStyles.avatarOverlayIcon}
+              />
+            </div>
+          </label>
+          <input
+            id="logo-upload"
+            type="file"
+            accept="image/*"
+            style={{ display: 'none' }}
+            onChange={handleLogoChange}
+          />
+
+          <div className={orgStyles.infoBox}>
+            <div className={orgStyles.fullName}>
+              {t('orgCreateNameTitle')}
+            </div>
+            <button
+              className={profileStyles.backButton}
+              onClick={() => router.back()}
+            >
+              {t('back')}
+            </button>
           </div>
         </div>
 
-        {/* Form */}
         <div className={orgStyles.rightColumn}>
           <form onSubmit={handleSubmit} className={profileStyles.profileForm}>
             <h2>{t('orgCreateTitle')}</h2>
-
             {error && <p className={profileStyles.error}>{error}</p>}
 
             <div className={profileStyles.field}>
@@ -104,7 +130,7 @@ export default function OrgCreatePage() {
 
             <div className={profileStyles.field}>
               <label>
-                {t('orgCreateSlug')}<span className={profileStyles.required}>*</span><br />
+                {t('orgCreateSlug')}<span className={profileStyles.required}>*</span><br/>
                 <small>{t('orgCreateSlugHelp')}</small>
               </label>
               <input
@@ -123,15 +149,6 @@ export default function OrgCreatePage() {
                 value={description}
                 onChange={e => setDescription(e.target.value)}
                 rows={6}
-              />
-            </div>
-
-            <div className={profileStyles.field}>
-              <label>{t('orgCreateLogo')}</label>
-              <input
-                type="file"
-                accept="image/*"
-                onChange={handleLogoChange}
               />
             </div>
 

@@ -80,5 +80,6 @@
   "orgEditLogo": "Логотип",
   "orgEditLoading": "Сохранение…",
   "orgEditSubmit": "Сохранить",
-  "orgEditError": "Ошибка обновления организации"
+  "orgEditError": "Ошибка обновления организации",
+  "orgCreateNameTitle": "Новая организация"
 }

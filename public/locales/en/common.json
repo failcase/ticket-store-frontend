@@ -80,5 +80,6 @@
   "orgEditLogo": "Logo",
   "orgEditLoading": "Saving…",
   "orgEditSubmit": "Save",
-  "orgEditError": "Organization update failed"
+  "orgEditError": "Organization update failed",
+  "orgCreateNameTitle": "New organization"
 }

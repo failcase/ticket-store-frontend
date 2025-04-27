@@ -28,10 +28,11 @@ export default function OrgEditPage() {
   const [name, setName] = useState('')
   const [slugInput, setSlugInput] = useState('')
   const [description, setDescription] = useState('')
-  const [logoFile, setLogoFile] = useState<File | null>(null)
   const [logoPreview, setLogoPreview] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
+  const [logoLoading, setLogoLoading] = useState(false)
+  const [logoError, setLogoError] = useState<string | null>(null)
 
   useEffect(() => {
     if (!slug) return
@@ -47,14 +48,36 @@ export default function OrgEditPage() {
       .catch(() => {})
   }, [slug])
 
+  const uploadLogo = async (file: File) => {
+    setLogoError(null)
+    setLogoLoading(true)
+    try {
+      const formData = new FormData()
+      formData.append('logo', file)
+      const res = await authFetch(`${API_URL}/api/org/${slug}`, {
+        method: 'PATCH',
+        body: formData,
+      })
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}))
+        throw new Error(data.detail || t('orgEditLogoError'))
+      }
+      const updated: OrgData = await res.json()
+      setLogoPreview(updated.logo || null)
+    } catch (err: any) {
+      setLogoError(err.message)
+    } finally {
+      setLogoLoading(false)
+    }
+  }
+
   const handleLogoChange = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0] || null
-    setLogoFile(file)
-    if (file) {
-      const reader = new FileReader()
-      reader.onload = () => setLogoPreview(reader.result as string)
-      reader.readAsDataURL(file)
-    }
+    if (!file) return
+    const reader = new FileReader()
+    reader.onload = () => setLogoPreview(reader.result as string)
+    reader.readAsDataURL(file)
+    uploadLogo(file)
   }
 
   const handleSubmit = async (e: FormEvent) => {
@@ -70,8 +93,6 @@ export default function OrgEditPage() {
       formData.append('name', name)
       formData.append('slug', slugInput)
       formData.append('description', description)
-      if (logoFile) formData.append('logo', logoFile)
-
       const res = await authFetch(`${API_URL}/api/org/${slug}`, {
         method: 'PUT',
         body: formData,
@@ -105,13 +126,36 @@ export default function OrgEditPage() {
       <Navbar />
       <main className={orgStyles.container}>
         <div className={orgStyles.leftColumn}>
-          <div className={orgStyles.avatarBox}>
+          {/* Clickable logo upload */}
+          <label
+            htmlFor="logo-upload"
+            className={`${orgStyles.avatarBox} ${profileStyles.avatarBox}`}
+          >
             <img
               src={logoPreview! || DEFAULT_LOGO}
               alt={t('orgLogoAlt')}
               onError={e => { e.currentTarget.src = DEFAULT_LOGO }}
             />
-          </div>
+            <div className={profileStyles.avatarOverlay}>
+              {logoLoading
+                ? <span>{t('orgEditLogoSaving')}</span>
+                : <img
+                    src="/pencil.svg"
+                    alt={t('orgEditLogo')}
+                    className={profileStyles.avatarOverlayIcon}
+                  />
+              }
+            </div>
+          </label>
+          <input
+            id="logo-upload"
+            type="file"
+            accept="image/*"
+            style={{ display: 'none' }}
+            onChange={handleLogoChange}
+          />
+          {logoError && <p className={profileStyles.error}>{logoError}</p>}
+
           <div className={orgStyles.infoBox}>
             <div className={orgStyles.fullName}>{org.name}</div>
             <div className={orgStyles.slugText}>@{org.slug}</div>
@@ -123,10 +167,12 @@ export default function OrgEditPage() {
             </button>
           </div>
         </div>
+
         <div className={orgStyles.rightColumn}>
           <form onSubmit={handleSubmit} className={profileStyles.profileForm}>
             <h2>{t('orgEditTitle')}</h2>
             {error && <p className={profileStyles.error}>{error}</p>}
+
             <div className={profileStyles.field}>
               <label>
                 {t('orgEditName')}<span className={profileStyles.required}>*</span>
@@ -138,6 +184,7 @@ export default function OrgEditPage() {
                 required
               />
             </div>
+
             <div className={profileStyles.field}>
               <label>
                 {t('orgEditSlug')}<span className={profileStyles.required}>*</span><br/>
@@ -152,6 +199,7 @@ export default function OrgEditPage() {
                 title={t('orgEditSlugHelp')}
               />
             </div>
+
             <div className={profileStyles.field}>
               <label>{t('orgEditDescription')}</label>
               <textarea
@@ -160,14 +208,7 @@ export default function OrgEditPage() {
                 rows={6}
               />
             </div>
-            <div className={profileStyles.field}>
-              <label>{t('orgEditLogo')}</label>
-              <input
-                type="file"
-                accept="image/*"
-                onChange={handleLogoChange}
-              />
-            </div>
+
             <button
               type="submit"
               className={profileStyles.editButton}
