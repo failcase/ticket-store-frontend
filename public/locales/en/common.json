@@ -1,0 +1,35 @@
+{
+  "brand": "FailCase Tickets",
+  "loginTitle": "Login",
+  "loginUsername": "Username",
+  "loginPassword": "Password",
+  "loginSubmit": "Log in",
+  "loginRegisterSuccess": "Registration successful! Please check your email to confirm.",
+  "loginNoTokens": "Failed to obtain authentication tokens",
+  "loginNoAccount": "Don't have an account?",
+  "loginRegister": "Register",
+
+  "registerTitle": "Register",
+  "registerUsername": "Username",
+  "registerEmail": "Email",
+  "registerFirstName": "First name",
+  "registerLastName": "Last name",
+  "registerPassword": "Password",
+  "registerPassword2": "Repeat password",
+  "registerSubmit": "Sign up",
+  "registerLoading": "Loading…",
+  "registerHaveAccount": "Already have an account?",
+  "registerLogin": "Log in",
+
+  "confirmEmailKeyNotFound": "Confirmation key not found in URL.",
+  "confirmEmailLoading": "Confirming email…",
+  "confirmEmailSuccess": "Email successfully confirmed! You can now log in.",
+  "confirmEmailError": "Error confirming email.",
+  "confirmEmailNetworkError": "Network error, please try again later.",
+  "confirmEmailLogin": "Log in",
+
+  "profile": "Profile",
+  "logout": "Log out",
+  "switchTheme": "Toggle theme",
+  "avatarAlt": "User avatar"
+}

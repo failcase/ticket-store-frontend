@@ -1,24 +1,28 @@
 // pages/confirm-email.tsx
-import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
-import Navbar from '@/components/Navbar';
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL!;
+import { useRouter } from 'next/router'
+import { useEffect, useState } from 'react'
+import Link from 'next/link'
+import { useTranslation } from 'next-i18next'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
+import Navbar from '@/components/Navbar'
+
+const API_URL = process.env.NEXT_PUBLIC_API_URL!
 
 export default function ConfirmEmail() {
-  const { query, isReady } = useRouter();
-  const [status, setStatus] = useState<'loading'|'success'|'error'>('loading');
-  const [message, setMessage] = useState('');
+  const { t } = useTranslation('common')
+  const { query, isReady } = useRouter()
+  const [status, setStatus] = useState<'loading'|'success'|'error'>('loading')
+  const [message, setMessage] = useState('')
 
   useEffect(() => {
-    if (!isReady) return;
-    const key = Array.isArray(query.key) ? query.key[0] : query.key;
+    if (!isReady) return
+    const key = Array.isArray(query.key) ? query.key[0] : query.key
     if (!key) {
-      setStatus('error');
-      setMessage('Ключ подтверждения не найден в URL.');
-      return;
+      setStatus('error')
+      setMessage(t('confirmEmailKeyNotFound'))
+      return
     }
-
     fetch(`${API_URL}/api/auth/registration/verify-email/`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -26,62 +30,47 @@ export default function ConfirmEmail() {
     })
       .then(async res => {
         if (res.ok) {
-          setStatus('success');
-          setMessage('Почта успешно подтверждена! Теперь вы можете войти.');
+          setStatus('success')
+          setMessage(t('confirmEmailSuccess'))
         } else {
-          const data = await res.json().catch(() => ({}));
-          setStatus('error');
-          setMessage(data.detail || 'Ошибка при подтверждении почты.');
+          const data = await res.json().catch(() => ({}))
+          setStatus('error')
+          setMessage(data.detail || t('confirmEmailError'))
         }
       })
       .catch(() => {
-        setStatus('error');
-        setMessage('Сетевая ошибка, попробуйте позже.');
-      });
-  }, [isReady, query.key]);
+        setStatus('error')
+        setMessage(t('confirmEmailNetworkError'))
+      })
+  }, [isReady, query.key, t])
 
   return (
     <>
       <Navbar />
       <main style={{ maxWidth: 500, margin: '4rem auto', textAlign: 'center' }}>
-        {status === 'loading' && <p>Подтверждаем почту…</p>}
+        {status === 'loading' && <p>{t('confirmEmailLoading')}</p>}
+
         {status === 'success' && (
           <>
-            <div style={{
-              padding: '1rem',
-              backgroundColor: '#28a745',
-              color: 'white',
-              borderRadius: 4,
-              marginBottom: '1.5rem'
-            }}>
-              {message}
-            </div>
-            <a
-              href="/login"
-              style={{
-                display: 'inline-block',
-                padding: '0.6rem 1.2rem',
-                backgroundColor: '#2da44e',
-                color: '#fff',
-                borderRadius: 4,
-                textDecoration: 'none'
-              }}
-            >
-              Войти
-            </a>
+            <div className="successMessage">{message}</div>
+            <Link href="/login" className="editButton">
+              {t('confirmEmailLogin')}
+            </Link>
           </>
         )}
+
         {status === 'error' && (
-          <div style={{
-            padding: '1rem',
-            backgroundColor: '#d73a49',
-            color: 'white',
-            borderRadius: 4
-          }}>
-            {message}
-          </div>
+          <div className="error">{message}</div>
         )}
       </main>
     </>
-  );
+  )
+}
+
+export async function getServerSideProps({ locale }: { locale: string }) {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale, ['common'])),
+    },
+  }
 }

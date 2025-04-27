@@ -1,5 +1,6 @@
 import Navbar from '@/components/Navbar'
 import Banner from '@/components/Banner'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 
 export default function Home() {
   return (
@@ -7,10 +8,15 @@ export default function Home() {
       <Navbar />
       <main style={{ padding: '2rem', maxWidth: '1024px', margin: '0 auto' }}>
         <Banner />
-
-        <h1>Добро пожаловать в FailCase Tickets</h1>
-        <p>Это демо-платформа для тестировщиков ПО.</p>
       </main>
     </>
   )
+}
+
+export async function getStaticProps({ locale }) {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale, ['common'])),
+    },
+  }
 }

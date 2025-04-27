@@ -1,0 +1,35 @@
+{
+  "brand": "FailCase Tickets",
+  "loginTitle": "Вход",
+  "loginUsername": "Имя пользователя",
+  "loginPassword": "Пароль",
+  "loginSubmit": "Войти",
+  "loginRegisterSuccess": "Регистрация успешна! Проверьте почту для подтверждения.",
+  "loginNoTokens": "Не удалось получить токены авторизации",
+  "loginNoAccount": "Нет аккаунта?",
+  "loginRegister": "Регистрация",
+
+  "registerTitle": "Регистрация",
+  "registerUsername": "Имя пользователя",
+  "registerEmail": "Email",
+  "registerFirstName": "Имя",
+  "registerLastName": "Фамилия",
+  "registerPassword": "Пароль",
+  "registerPassword2": "Повторите пароль",
+  "registerSubmit": "Зарегистрироваться",
+  "registerLoading": "Загрузка…",
+  "registerHaveAccount": "Есть аккаунт?",
+  "registerLogin": "Войти",
+
+  "confirmEmailKeyNotFound": "Ключ подтверждения не найден в URL.",
+  "confirmEmailLoading": "Подтверждаем почту…",
+  "confirmEmailSuccess": "Почта успешно подтверждена! Теперь вы можете войти.",
+  "confirmEmailError": "Ошибка при подтверждении почты.",
+  "confirmEmailNetworkError": "Сетевая ошибка, попробуйте позже.",
+  "confirmEmailLogin": "Войти",
+
+  "profile": "Профиль",
+  "logout": "Выйти",
+  "switchTheme": "Переключить тему",
+  "avatarAlt": "Аватар пользователя"
+}

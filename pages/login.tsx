@@ -1,13 +1,17 @@
 // pages/login.tsx
+
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
+import { useTranslation } from 'next-i18next'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import Navbar from '@/components/Navbar'
 import styles from '@/styles/Login.module.css'
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL!
 
 export default function Login() {
+  const { t } = useTranslation('common')
   const router = useRouter()
   const { registered } = router.query
 
@@ -18,15 +22,14 @@ export default function Login() {
 
   useEffect(() => {
     if (registered === '1') {
-      setInfo('Регистрация успешна! Проверьте почту для подтверждения.')
+      setInfo(t('loginRegisterSuccess'))
       router.replace('/login', undefined, { shallow: true })
     }
-  }, [registered, router])
+  }, [registered, router, t])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    setError('')
-    setInfo('')
+    setError(''); setInfo('')
 
     try {
       const res = await fetch(`${API_URL}/api/token`, {
@@ -35,22 +38,14 @@ export default function Login() {
         body: JSON.stringify({ username, password }),
       })
       const data = await res.json()
+      if (!res.ok) throw new Error(data.detail || JSON.stringify(data))
 
-      if (!res.ok) {
-        throw new Error(data.detail || JSON.stringify(data))
-      }
+      const access = (data as any).access || (data as any).access_token
+      const refresh = (data as any).refresh || (data as any).refresh_token
+      if (!access || !refresh) throw new Error(t('loginNoTokens'))
 
-      // Поддерживаем оба варианта ключей: dj-rest-auth может вернуть access_token или access
-      const accessToken  = (data as any).access_token  ?? (data as any).access
-      const refreshToken = (data as any).refresh_token ?? (data as any).refresh
-
-      if (!accessToken || !refreshToken) {
-        throw new Error('Не удалось получить токены авторизации')
-      }
-
-      localStorage.setItem('access', accessToken)
-      localStorage.setItem('refresh', refreshToken)
-
+      localStorage.setItem('access', access)
+      localStorage.setItem('refresh', refresh)
       router.push('/profile')
     } catch (err: any) {
       setError(err.message)
@@ -61,23 +56,12 @@ export default function Login() {
     <>
       <Navbar />
       <main className={styles.container}>
-        {info && (
-          <p style={{
-            backgroundColor: '#2da44e',
-            color: '#fff',
-            padding: '0.75rem',
-            borderRadius: 4,
-            marginBottom: '1rem',
-            textAlign: 'center'
-          }}>
-            {info}
-          </p>
-        )}
+        {info && <p className={styles.successMessage}>{info}</p>}
 
-        <h1 className={styles.title}>Вход</h1>
+        <h1 className={styles.title}>{t('loginTitle')}</h1>
         <form onSubmit={handleSubmit}>
           <div className={styles.field}>
-            <label className={styles.label}>Username</label>
+            <label className={styles.label}>{t('loginUsername')}</label>
             <input
               className={styles.input}
               type="text"
@@ -88,7 +72,7 @@ export default function Login() {
           </div>
 
           <div className={styles.field}>
-            <label className={styles.label}>Пароль</label>
+            <label className={styles.label}>{t('loginPassword')}</label>
             <input
               className={styles.input}
               type="password"
@@ -105,20 +89,25 @@ export default function Login() {
             className={styles.submit}
             disabled={!username || !password}
           >
-            Войти
+            {t('loginSubmit')}
           </button>
         </form>
 
-        <p style={{ textAlign: 'center', marginTop: '1rem' }}>
-          Нет аккаунта?{' '}
-          <Link
-            href="/register"
-            style={{ color: 'var(--primary)' }}
-          >
-            Зарегистрироваться
+        <p className={styles.footerText}>
+          {t('loginNoAccount')}{' '}
+          <Link href="/register" className={styles.link}>
+            {t('loginRegister')}
           </Link>
         </p>
       </main>
     </>
   )
+}
+
+export async function getServerSideProps({ locale }: { locale: string }) {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale, ['common'])),
+    },
+  }
 }

@@ -1,0 +1,39 @@
+/* нативный селект без рамок, в цвет теме */
+.select {
+  background: transparent;
+  color: var(--fg);
+  border: none;
+  font-size: 1rem;
+  cursor: pointer;
+  padding: 0;            /* сброс отступов */
+  margin-right: 1rem;    /* отступ справа перед другими элементами */
+}
+
+/* Скрыть дефолтную стрелку в WebKit */
+.select::-webkit-appearance {
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+/* Скрыть дефолтную стрелку в Firefox */
+.select::-moz-focus-inner {
+  border: 0;
+}
+
+/* Добавим кастомную стрелку через фон */
+.select {
+  background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20width%3D'12'%20height%3D'8'%20viewBox%3D'0%200%2012%208'%20xmlns%3D'http://www.w3.org/2000/svg'%3E%3Cpath%20fill%3D'%238B949E'%20d%3D'M6%207.5L11.5%201.5L0.5%201.5Z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.25rem center;
+  padding-right: 1.5rem; /* место под стрелку */
+}
+
+/* кнопка-флаг */
+.flagBtn {
+  background: transparent;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 0;
+  margin: 0;
+}
