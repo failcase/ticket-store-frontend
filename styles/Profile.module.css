@@ -197,7 +197,7 @@
 .profileForm button,
 .passwordBox button,
 .emailBox button {
-  width: 100%;
+  width: auto;
   padding: 0.5rem 1rem;
   background: #28a745;
   color: #fff;
@@ -205,7 +205,6 @@
   border-radius: 6px;
   cursor: pointer;
   font-size: 0.95rem;
-  align-self: stretch;
   margin-top: 1rem;
   transition: background 0.2s;
 }
@@ -285,8 +284,8 @@
 /* Кнопка «Создать организацию» */
 .createButton {
   margin-top: 1rem;
-  display: block;
-  width: 100%;
+  display: inline-block;
+  width: auto;
   padding: 0.5rem 1rem;
   background: var(--primary);
   color: #fff;
