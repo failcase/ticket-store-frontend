@@ -197,6 +197,7 @@
 .profileForm button,
 .passwordBox button,
 .emailBox button {
+  width: 100%;
   padding: 0.5rem 1rem;
   background: #28a745;
   color: #fff;
@@ -204,8 +205,7 @@
   border-radius: 6px;
   cursor: pointer;
   font-size: 0.95rem;
-  min-width: 120px;
-  align-self: flex-start;
+  align-self: stretch;
   margin-top: 1rem;
   transition: background 0.2s;
 }
