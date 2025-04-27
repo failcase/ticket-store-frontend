@@ -13,15 +13,31 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL!;
 const DEFAULT_AVATAR = '/default-avatar.svg';
 const DEFAULT_ORG_LOGO = '/default-logo.svg';
 
+interface UserProfile {
+  username: string;
+  email: string;
+  first_name: string;
+  last_name?: string;
+  avatar?: string;
+}
+
+interface Organization {
+  id: number;
+  slug: string;
+  name: string;
+  logo?: string;
+}
+
 export default function ProfileViewPage() {
   const { t } = useTranslation('common');
   const router = useRouter();
   const { username } = router.query as { username: string };
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
   const [me, setMe] = useState<string | null>(null);
-  const [organizations, setOrganizations] = useState<any[]>([]);
+  const [organizations, setOrganizations] = useState<Organization[]>([]);
 
+  // determine current user from token
   useEffect(() => {
     if (typeof window === 'undefined') return;
     const token = localStorage.getItem('access');
@@ -29,25 +45,35 @@ export default function ProfileViewPage() {
       try {
         const { username: u } = JSON.parse(atob(token.split('.')[1]));
         setMe(u);
-      } catch {}
+      } catch {
+        setMe(null);
+      }
     }
   }, []);
 
+  // fetch user profile
   useEffect(() => {
     if (!username) return;
     setLoading(true);
     authFetch(`${API_URL}/api/users/${username}`)
-      .then((res) => (res.ok ? res.json() : Promise.reject()))
-      .then((data) => setUser(data))
+      .then((res) => {
+        if (!res.ok) throw new Error('Failed to fetch user');
+        return res.json() as Promise<UserProfile>;
+      })
+      .then((data: UserProfile) => setUser(data))
       .catch(() => setUser(null))
       .finally(() => setLoading(false));
   }, [username]);
 
+  // fetch organizations owned by user
   useEffect(() => {
     if (!username) return;
     fetch(`${API_URL}/api/org?owner=${username}`)
-      .then((res) => (res.ok ? res.json() : Promise.reject()))
-      .then((data) => setOrganizations(data))
+      .then((res) => {
+        if (!res.ok) throw new Error('Failed to fetch organizations');
+        return res.json() as Promise<Organization[]>;
+      })
+      .then((data: Organization[]) => setOrganizations(data))
       .catch(() => setOrganizations([]));
   }, [username]);
 
@@ -55,18 +81,24 @@ export default function ProfileViewPage() {
     return (
       <>
         <Navbar />
-        <main style={{ padding: '2rem', textAlign: 'center' }}>{t('profileLoading')}</main>
+        <main style={{ padding: '2rem', textAlign: 'center' }}>
+          {t('profileLoading')}
+        </main>
       </>
     );
   }
+
   if (!user) {
     return (
       <>
         <Navbar />
-        <main style={{ padding: '2rem', textAlign: 'center' }}>{t('profileNotFound')}</main>
+        <main style={{ padding: '2rem', textAlign: 'center' }}>
+          {t('profileNotFound')}
+        </main>
       </>
     );
   }
+
   const isOwner = me === username;
 
   return (
@@ -84,7 +116,7 @@ export default function ProfileViewPage() {
               width={278}
               height={278}
               onError={(e) => {
-                e.currentTarget.src = DEFAULT_AVATAR;
+                (e.currentTarget as HTMLImageElement).src = DEFAULT_AVATAR;
               }}
             />
           </div>
@@ -117,7 +149,11 @@ export default function ProfileViewPage() {
             ) : (
               <div className={styles.organizationsList}>
                 {organizations.map((org) => (
-                  <Link key={org.id} href={`/org/${org.slug}`} className={styles.organizationItem}>
+                  <Link
+                    key={org.id}
+                    href={`/org/${org.slug}`}
+                    className={styles.organizationItem}
+                  >
                     <Image
                       src={org.logo || DEFAULT_ORG_LOGO}
                       alt={org.name}
@@ -125,7 +161,7 @@ export default function ProfileViewPage() {
                       height={96}
                       className={styles.orgLogo}
                       onError={(e) => {
-                        e.currentTarget.src = DEFAULT_ORG_LOGO;
+                        (e.currentTarget as HTMLImageElement).src = DEFAULT_ORG_LOGO;
                       }}
                     />
                     <span className={styles.organizationName}>{org.name}</span>
