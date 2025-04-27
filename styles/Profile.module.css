@@ -230,3 +230,74 @@
   margin-bottom: 0.5rem;
   font-size: 0.9rem;
 }
+
+/* ——— Блок «Организации» ——— */
+.organizationsBlock {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  padding: 1rem;
+  border-radius: 6px;
+}
+
+.organizationsBlock h2 {
+  margin: 0 0 0.75rem;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--fg);
+}
+
+/* Горизонтальный список */
+.organizationsList {
+  display: flex;
+  gap: 1rem;
+  overflow-x: auto;
+  padding-bottom: 0.5rem;
+}
+
+/* ——— элемент списка организаций ——— */
+.organizationItem {
+  flex: 0 0 auto;
+  width: 96px;               /* было 80px, стало шире */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* ——— лого организации ——— */
+.orgLogo {
+  width: 96px;               /* было 80px */
+  height: 96px;              /* было 80px */
+  border-radius: 50%;
+  object-fit: cover;
+  background: var(--bg);
+  border: 1px solid var(--border);
+}
+
+/* ——— название организации ——— */
+.organizationName {
+  margin-top: 0.5rem;
+  font-size: 1rem;           /* было 0.9rem, немного больше */
+  font-weight: 500;
+  color: var(--fg);
+  text-align: center;
+}
+
+/* Кнопка «Создать организацию» */
+.createButton {
+  margin-top: 1rem;
+  display: block;
+  width: 100%;
+  padding: 0.5rem 1rem;
+  background: var(--primary);
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.createButton:hover {
+  background: #24943f;
+}
+
