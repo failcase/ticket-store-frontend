@@ -75,7 +75,7 @@ export default function ProfileEditPage() {
       .finally(() => setLoading(false))
   }, [username])
 
-  if (loading || me !== username) {
+  if (loading || me !== username || !user) {
     return (
       <>
         <Navbar />

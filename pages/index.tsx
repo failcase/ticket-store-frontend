@@ -1,6 +1,7 @@
 import Navbar from '@/components/Navbar'
 import Banner from '@/components/Banner'
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import type { GetStaticProps, GetStaticPropsContext } from 'next';
 
 export default function Home() {
   return (
@@ -13,10 +14,14 @@ export default function Home() {
   )
 }
 
-export async function getStaticProps({ locale }) {
+export const getStaticProps: GetStaticProps = async (
+  context: GetStaticPropsContext
+) => {
+  const { locale = 'ru' } = context;
+
   return {
     props: {
       ...(await serverSideTranslations(locale, ['common'])),
     },
-  }
-}
+  };
+};

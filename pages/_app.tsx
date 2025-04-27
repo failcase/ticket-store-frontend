@@ -2,15 +2,14 @@
 import { appWithTranslation } from 'next-i18next'
 import '@/styles/globals.css'
 import { ThemeProvider } from 'next-themes'
-import Router from 'next/router'
 import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
 import Footer from '@/components/Footer'
+import type { AppProps } from 'next/app';
 
 NProgress.configure({ showSpinner: false, trickleSpeed: 200 })
-// …your NProgress hooks…
 
-function MyApp({ Component, pageProps }) {
+function MyApp({ Component, pageProps }: AppProps) {
   return (
     <ThemeProvider attribute="class" defaultTheme="system">
       <div className="app-wrapper">

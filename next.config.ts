@@ -1,11 +1,16 @@
 import type { NextConfig } from "next";
-import {i18n} from './next-i18next.config';
+import { i18n as baseI18n } from './next-i18next.config.js';
 
 const nextConfig: NextConfig = {
+  output: 'standalone',
   /* config options here */
   reactStrictMode: true,
   devIndicators: false,
-  i18n,
+  i18n: {
+    // берём все настройки, но переопределяем
+    ...baseI18n,
+    localeDetection: false, // ← только false
+  },
 };
 
 
