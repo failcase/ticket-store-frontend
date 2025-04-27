@@ -67,5 +67,18 @@
   "orgCreateLoading": "Создание…",
   "orgCreateSubmit": "Создать",
   "logoPreview": "Превью логотипа",
-  "orgCreateError": "Ошибка создания организации"
+  "orgCreateError": "Ошибка создания организации",
+  "orgNotFound": "Организация не найдена",
+  "orgLogoAlt": "Логотип организации",
+  "editOrganization": "Редактировать организацию",
+  "owner": "Владелец",
+  "orgEditTitle": "Редактирование организации",
+  "orgEditName": "Название",
+  "orgEditSlug": "Slug",
+  "orgEditSlugHelp": "Только латинские буквы, цифры, точки и дефис",
+  "orgEditDescription": "Описание",
+  "orgEditLogo": "Логотип",
+  "orgEditLoading": "Сохранение…",
+  "orgEditSubmit": "Сохранить",
+  "orgEditError": "Ошибка обновления организации"
 }

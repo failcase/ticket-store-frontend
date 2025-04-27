@@ -67,5 +67,18 @@
   "orgCreateLoading": "Creating…",
   "orgCreateSubmit": "Create",
   "logoPreview": "Logo preview",
-  "orgCreateError": "Organization creation failed"
+  "orgCreateError": "Organization creation failed",
+  "orgNotFound": "Organization not found",
+  "orgLogoAlt": "Organization logo",
+  "editOrganization": "Edit organization",
+  "owner": "Owner",
+  "orgEditTitle": "Edit organization",
+  "orgEditName": "Name",
+  "orgEditSlug": "Slug",
+  "orgEditSlugHelp": "Only Latin letters, numbers, dots, and dashes",
+  "orgEditDescription": "Description",
+  "orgEditLogo": "Logo",
+  "orgEditLoading": "Saving…",
+  "orgEditSubmit": "Save",
+  "orgEditError": "Organization update failed"
 }
