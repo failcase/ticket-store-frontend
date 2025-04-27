@@ -1,13 +1,17 @@
+// pages/profile/[username].tsx
+
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import Navbar from '@/components/Navbar'
 import { authFetch } from '@/utils/auth'
+import { useTranslation } from 'next-i18next'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import styles from '@/styles/Profile.module.css'
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL!
 const DEFAULT_AVATAR = '/default-avatar.svg'
-const DEFAULT_ORG_LOGO = '/default-logo.svg'  // <-- теперь именно он
+const DEFAULT_ORG_LOGO = '/default-logo.svg'
 
 interface UserProfile {
   username: string
@@ -26,6 +30,7 @@ interface Organization {
 }
 
 export default function ProfileViewPage() {
+  const { t } = useTranslation('common')
   const router = useRouter()
   const { username } = router.query as { username: string }
 
@@ -70,15 +75,20 @@ export default function ProfileViewPage() {
     return (
       <>
         <Navbar />
-        <main style={{ padding: '2rem', textAlign: 'center' }}>Загрузка...</main>
+        <main style={{ padding: '2rem', textAlign: 'center' }}>
+          {t('profileLoading')}
+        </main>
       </>
     )
   }
+
   if (!user) {
     return (
       <>
         <Navbar />
-        <main style={{ padding: '2rem', textAlign: 'center' }}>Профиль не найден</main>
+        <main style={{ padding: '2rem', textAlign: 'center' }}>
+          {t('profileNotFound')}
+        </main>
       </>
     )
   }
@@ -89,7 +99,7 @@ export default function ProfileViewPage() {
     <>
       <Navbar />
       <main className={styles.container}>
-        {/* Левая колонка: аватар и инфо */}
+        {/* Левая колонка */}
         <div className={styles.leftColumn}>
           <div
             className={styles.avatarBox}
@@ -97,7 +107,7 @@ export default function ProfileViewPage() {
           >
             <img
               src={user.avatar || DEFAULT_AVATAR}
-              alt="Аватар"
+              alt={t('avatarAlt')}
               onError={e => { e.currentTarget.src = DEFAULT_AVATAR }}
             />
           </div>
@@ -105,30 +115,31 @@ export default function ProfileViewPage() {
             <div className={styles.fullName}>
               {user.first_name} {user.last_name}
             </div>
-            <div className={styles.usernameText}>@{user.username}</div>
+            <div className={styles.usernameText}>
+              @{user.username}
+            </div>
             <div className={styles.emailRow}>
-              <span className={styles.emailIcon}>📧</span>
-              {user.email}
+              <span className={styles.emailIcon} />{user.email}
             </div>
             {isOwner && (
               <button
                 className={styles.editButton}
                 onClick={() => router.push(`/profile/${username}/edit`)}
               >
-                Редактировать профиль
+                {t('editProfile')}
               </button>
             )}
           </div>
         </div>
 
-        {/* Правая колонка: кликабельные организации */}
+        {/* Правая колонка */}
         <div className={styles.rightColumn}>
           <div className={styles.organizationsBlock}>
-            <h2>Организации</h2>
+            <h2>{t('organizations')}</h2>
 
             {organizations.length === 0 ? (
               <p style={{ color: 'var(--fg-secondary)', fontStyle: 'italic' }}>
-                Нет организаций
+                {t('noOrganizations')}
               </p>
             ) : (
               <div className={styles.organizationsList}>
@@ -157,7 +168,7 @@ export default function ProfileViewPage() {
                 className={styles.createButton}
                 onClick={() => router.push('/org/create')}
               >
-                Создать организацию
+                {t('createOrganization')}
               </button>
             )}
           </div>
@@ -165,4 +176,13 @@ export default function ProfileViewPage() {
       </main>
     </>
   )
+}
+
+// Подгружаем переводы при SSR
+export async function getServerSideProps({ locale }: { locale: string }) {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale, ['common'])),
+    },
+  }
 }

@@ -1,17 +1,17 @@
-// pages/org/create.tsx
-
 import { useState, ChangeEvent, FormEvent } from 'react'
 import { useRouter } from 'next/router'
+import { useTranslation } from 'next-i18next'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import Navbar from '@/components/Navbar'
 import profileStyles from '@/styles/Profile.module.css'
 import orgStyles from '@/styles/Organization.module.css'
 import { authFetch } from '@/utils/auth'
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL!
-// здесь — правильный путь к дефолтному лого
 const DEFAULT_LOGO = '/default-logo.svg'
 
 export default function OrgCreatePage() {
+  const { t } = useTranslation('common')
   const router = useRouter()
 
   const [name, setName] = useState('')
@@ -38,9 +38,8 @@ export default function OrgCreatePage() {
     e.preventDefault()
     setError(null)
 
-    // Простая валидация slug
     if (!/^[A-Za-z0-9.\-]+$/.test(slugInput)) {
-      setError('Slug может содержать только латинские буквы, цифры, точки и дефис')
+      setError(t('orgCreateSlugHelp'))
       return
     }
 
@@ -56,12 +55,10 @@ export default function OrgCreatePage() {
         method: 'POST',
         body: formData,
       })
-
       if (!res.ok) {
         const data = await res.json()
-        throw new Error(data.detail || 'Ошибка создания организации')
+        throw new Error(data.detail || t('orgCreateError'))
       }
-
       const created = await res.json()
       router.push(`/org/${created.slug}`)
     } catch (err: any) {
@@ -75,27 +72,27 @@ export default function OrgCreatePage() {
     <>
       <Navbar />
       <main className={orgStyles.container}>
-        {/* Превью логотипа */}
+        {/* Preview */}
         <div className={orgStyles.leftColumn}>
           <div className={orgStyles.avatarBox}>
             <img
               src={logoPreview || DEFAULT_LOGO}
-              alt="Превью логотипа"
+              alt={t('logoPreview')}
               onError={e => { e.currentTarget.src = DEFAULT_LOGO }}
             />
           </div>
         </div>
 
-        {/* Форма */}
+        {/* Form */}
         <div className={orgStyles.rightColumn}>
           <form onSubmit={handleSubmit} className={profileStyles.profileForm}>
-            <h2>Создание организации</h2>
+            <h2>{t('orgCreateTitle')}</h2>
 
             {error && <p className={profileStyles.error}>{error}</p>}
 
             <div className={profileStyles.field}>
               <label>
-                Название<span className={profileStyles.required}>*</span>
+                {t('orgCreateName')}<span className={profileStyles.required}>*</span>
               </label>
               <input
                 type="text"
@@ -107,8 +104,8 @@ export default function OrgCreatePage() {
 
             <div className={profileStyles.field}>
               <label>
-                Slug<span className={profileStyles.required}>*</span><br/>
-                <small>Только латинские буквы, цифры, точки и дефис</small>
+                {t('orgCreateSlug')}<span className={profileStyles.required}>*</span><br />
+                <small>{t('orgCreateSlugHelp')}</small>
               </label>
               <input
                 type="text"
@@ -116,12 +113,12 @@ export default function OrgCreatePage() {
                 onChange={e => setSlugInput(e.target.value)}
                 required
                 pattern="[A-Za-z0-9.\-]+"
-                title="Только латинские буквы, цифры, точки и дефис"
+                title={t('orgCreateSlugHelp')}
               />
             </div>
 
             <div className={profileStyles.field}>
-              <label>Описание</label>
+              <label>{t('orgCreateDescription')}</label>
               <textarea
                 value={description}
                 onChange={e => setDescription(e.target.value)}
@@ -130,7 +127,7 @@ export default function OrgCreatePage() {
             </div>
 
             <div className={profileStyles.field}>
-              <label>Логотип</label>
+              <label>{t('orgCreateLogo')}</label>
               <input
                 type="file"
                 accept="image/*"
@@ -143,11 +140,19 @@ export default function OrgCreatePage() {
               className={profileStyles.editButton}
               disabled={loading}
             >
-              {loading ? 'Создание...' : 'Создать'}
+              {loading ? t('orgCreateLoading') : t('orgCreateSubmit')}
             </button>
           </form>
         </div>
       </main>
     </>
   )
+}
+
+export async function getServerSideProps({ locale }: { locale: string }) {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale, ['common'])),
+    },
+  }
 }
