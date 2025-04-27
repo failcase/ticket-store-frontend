@@ -1,50 +1,60 @@
 // pages/register.tsx
+import { useState } from 'react';
+import { useRouter } from 'next/router';
+import Link from 'next/link';
+import { useTranslation } from 'next-i18next';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import Navbar from '@/components/Navbar';
+import styles from '@/styles/Login.module.css';
 
-import { useState } from 'react'
-import { useRouter } from 'next/router'
-import Link from 'next/link'
-import { useTranslation } from 'next-i18next'
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
-import Navbar from '@/components/Navbar'
-import styles from '@/styles/Login.module.css'
+const API_URL = process.env.NEXT_PUBLIC_API_URL!;
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL!
+interface RegisterForm {
+  username: string;
+  email: string;
+  first_name: string;
+  last_name: string;
+  password1: string;
+  password2: string;
+}
 
 export default function Register() {
-  const { t } = useTranslation('common')
-  const router = useRouter()
-  const [form, setForm] = useState({
+  const { t } = useTranslation('common');
+  const router = useRouter();
+  const [form, setForm] = useState<RegisterForm>({
     username: '',
     email: '',
     first_name: '',
     last_name: '',
     password1: '',
-    password2: ''
-  })
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState('')
+    password2: '',
+  });
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setForm({ ...form, [e.target.name]: e.target.value })
-  }
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setError(''); setLoading(true)
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setError('');
+    setLoading(true);
     try {
       const res = await fetch(`${API_URL}/api/auth/registration/`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(form),
-      })
-      const data = await res.json()
-      if (!res.ok) throw new Error(data.detail || JSON.stringify(data))
-      router.push({ pathname: '/login', query: { registered: '1' } })
-    } catch (err: any) {
-      setError(err.message)
-      setLoading(false)
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.detail || JSON.stringify(data));
+      router.push({ pathname: '/login', query: { registered: '1' } });
+    } catch (err: unknown) {
+      if (err instanceof Error) setError(err.message);
+      else setError(String(err));
+      setLoading(false);
     }
-  }
+  };
 
   return (
     <>
@@ -128,11 +138,7 @@ export default function Register() {
             />
           </div>
           {error && <p className={styles.error}>{error}</p>}
-          <button
-            type="submit"
-            className={styles.submit}
-            disabled={loading}
-          >
+          <button type="submit" className={styles.submit} disabled={loading}>
             {loading ? t('registerLoading') : t('registerSubmit')}
           </button>
         </form>
@@ -144,7 +150,7 @@ export default function Register() {
         </p>
       </main>
     </>
-  )
+  );
 }
 
 export async function getServerSideProps({ locale }: { locale: string }) {
@@ -152,5 +158,5 @@ export async function getServerSideProps({ locale }: { locale: string }) {
     props: {
       ...(await serverSideTranslations(locale, ['common'])),
     },
-  }
+  };
 }
