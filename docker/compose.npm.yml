@@ -1,0 +1,9 @@
+services:
+  ticket-store-frontend:
+    image: failcase/ticket-store-frontend:latest
+    restart: unless-stopped
+
+networks:
+  default:
+    external: true
+    name: ${NPM_NETWORK_NAME:-frontend}
