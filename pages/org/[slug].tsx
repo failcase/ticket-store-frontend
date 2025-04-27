@@ -5,14 +5,13 @@ import { useRouter } from 'next/router'
 import { useEffect, useState, useRef } from 'react'
 import { useTranslation } from 'next-i18next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
-
 import Navbar from '@/components/Navbar'
 import profileStyles from '@/styles/Profile.module.css'
 import orgStyles from '@/styles/Organization.module.css'
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL!
 const DEFAULT_LOGO = '/default-logo.svg'
-const CONFIRM_SECONDS = 5
+const CONFIRM_SECONDS = 3
 
 interface OrgData {
   name: string
@@ -30,14 +29,13 @@ export default function OrgViewPage() {
   const [org, setOrg] = useState<OrgData | null>(null)
   const [loading, setLoading] = useState(true)
   const [me, setMe] = useState<string | null>(null)
-
   const [confirmingDelete, setConfirmingDelete] = useState(false)
   const [confirmSeconds, setConfirmSeconds] = useState<number>(CONFIRM_SECONDS)
   const [deleteDisabled, setDeleteDisabled] = useState(false)
-  const timerRef = useRef<NodeJS.Timeout>()
+  const timerRef = useRef<NodeJS.Timeout | null>(null)
 
+  // получаем текущего пользователя из токена
   useEffect(() => {
-    // достаём имя текущего пользователя из токена
     if (typeof window === 'undefined') return
     const token = localStorage.getItem('access')
     if (!token) return
@@ -47,6 +45,7 @@ export default function OrgViewPage() {
     } catch {}
   }, [])
 
+  // загружаем данные организации
   useEffect(() => {
     if (!slug) return
     setLoading(true)
@@ -57,13 +56,13 @@ export default function OrgViewPage() {
       .finally(() => setLoading(false))
   }, [slug])
 
-  // Запускаем таймер обратного отсчёта при подтверждении удаления
+  // таймер подтверждения удаления
   useEffect(() => {
     if (confirmingDelete && deleteDisabled) {
       timerRef.current = setInterval(() => {
         setConfirmSeconds(prev => {
           if (prev <= 1) {
-            clearInterval(timerRef.current!)
+            if (timerRef.current) clearInterval(timerRef.current)
             setDeleteDisabled(false)
             return 0
           }
@@ -71,17 +70,17 @@ export default function OrgViewPage() {
         })
       }, 1000)
     }
-    return () => clearInterval(timerRef.current!)
+    return () => {
+      if (timerRef.current) clearInterval(timerRef.current)
+    }
   }, [confirmingDelete, deleteDisabled])
 
   const handleDeleteClick = () => {
     if (!confirmingDelete) {
-      // первый клик – переходим в режим подтверждения
       setConfirmingDelete(true)
       setConfirmSeconds(CONFIRM_SECONDS)
       setDeleteDisabled(true)
     } else {
-      // второй клик после отсчёта – отправляем DELETE
       fetch(`${API_URL}/api/org/${slug}`, {
         method: 'DELETE',
         headers: {
@@ -91,12 +90,9 @@ export default function OrgViewPage() {
       })
         .then(res => {
           if (res.ok) router.push('/profile')
-          else {
-            // TODO: показывать ошибку удаления
-          }
         })
         .catch(() => {
-          // TODO: показывать сетевую ошибку
+          // TODO: показывать ошибку
         })
     }
   }
@@ -147,7 +143,6 @@ export default function OrgViewPage() {
               </Link>
             </div>
             <p className={orgStyles.description}>{org.description}</p>
-
             {isOwner && (
               <>
                 <button
@@ -156,16 +151,15 @@ export default function OrgViewPage() {
                 >
                   {t('editOrganization')}
                 </button>
-
                 <button
                   className={orgStyles.deleteButton}
                   onClick={handleDeleteClick}
                   disabled={deleteDisabled}
                 >
                   {confirmingDelete
-                    ? confirmSeconds > 0
-                      ? `${t('confirmDeleteOrganization')} ${confirmSeconds}...`
-                      : t('confirmDeleteOrganization')
+                    ? (confirmSeconds > 0
+                        ? `${t('confirmDeleteOrganization')} ${confirmSeconds}...`
+                        : t('confirmDeleteOrganization'))
                     : t('deleteOrganization')}
                 </button>
               </>
@@ -173,7 +167,7 @@ export default function OrgViewPage() {
           </div>
         </div>
         <div className={orgStyles.rightColumn}>
-          {/* Здесь может быть список событий, участников и т.д. */}
+          {/* Список событий, участников и т.д. */}
         </div>
       </main>
     </>
