@@ -8,7 +8,6 @@
   "loginNoTokens": "Не удалось получить токены авторизации",
   "loginNoAccount": "Нет аккаунта?",
   "loginRegister": "Регистрация",
-
   "registerTitle": "Регистрация",
   "registerUsername": "Имя пользователя",
   "registerEmail": "Email",
@@ -20,14 +19,12 @@
   "registerLoading": "Загрузка…",
   "registerHaveAccount": "Есть аккаунт?",
   "registerLogin": "Войти",
-
   "confirmEmailKeyNotFound": "Ключ подтверждения не найден в URL.",
   "confirmEmailLoading": "Подтверждаем почту…",
   "confirmEmailSuccess": "Почта успешно подтверждена! Теперь вы можете войти.",
   "confirmEmailError": "Ошибка при подтверждении почты.",
   "confirmEmailNetworkError": "Сетевая ошибка, попробуйте позже.",
   "confirmEmailLogin": "Войти",
-
   "profile": "Профиль",
   "logout": "Выйти",
   "switchTheme": "Переключить тему",
@@ -57,7 +54,6 @@
   "changePasswordSuccess": "Пароль изменён",
   "emailChangeSent": "Письмо с подтверждением отправлено",
   "changeAvatar": "Изменить аватар",
-
   "orgCreateTitle": "Создание организации",
   "orgCreateName": "Название",
   "orgCreateSlug": "Slug",
@@ -81,5 +77,7 @@
   "orgEditLoading": "Сохранение…",
   "orgEditSubmit": "Сохранить",
   "orgEditError": "Ошибка обновления организации",
+  "deleteOrganization": "Удалить организацию",
+  "confirmDeleteOrganization": "Я уверен",
   "orgCreateNameTitle": "Новая организация"
 }

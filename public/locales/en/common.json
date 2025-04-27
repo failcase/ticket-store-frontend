@@ -8,7 +8,6 @@
   "loginNoTokens": "Failed to obtain authentication tokens",
   "loginNoAccount": "Don't have an account?",
   "loginRegister": "Register",
-
   "registerTitle": "Register",
   "registerUsername": "Username",
   "registerEmail": "Email",
@@ -20,14 +19,12 @@
   "registerLoading": "Loading…",
   "registerHaveAccount": "Already have an account?",
   "registerLogin": "Log in",
-
   "confirmEmailKeyNotFound": "Confirmation key not found in URL.",
   "confirmEmailLoading": "Confirming email…",
   "confirmEmailSuccess": "Email successfully confirmed! You can now log in.",
   "confirmEmailError": "Error confirming email.",
   "confirmEmailNetworkError": "Network error, please try again later.",
   "confirmEmailLogin": "Log in",
-
   "profile": "Profile",
   "logout": "Log out",
   "switchTheme": "Toggle theme",
@@ -57,7 +54,6 @@
   "changePasswordSuccess": "Password changed",
   "emailChangeSent": "Confirmation email sent",
   "changeAvatar": "Change avatar",
-
   "orgCreateTitle": "Create organization",
   "orgCreateName": "Name",
   "orgCreateSlug": "Slug",
@@ -81,5 +77,7 @@
   "orgEditLoading": "Saving…",
   "orgEditSubmit": "Save",
   "orgEditError": "Organization update failed",
+  "deleteOrganization": "Delete organization",
+  "confirmDeleteOrganization": "I'm sure",
   "orgCreateNameTitle": "New organization"
 }

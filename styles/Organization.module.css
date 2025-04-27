@@ -1,4 +1,5 @@
-/* Общий контейнер */
+/* styles/Organization.module.css */
+
 .container {
   display: flex;
   gap: 1.5rem;
@@ -16,13 +17,13 @@
   }
 }
 
-/* Левые и правые колонки */
 .leftColumn {
   flex: 0 0 280px;
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
 }
+
 .rightColumn {
   flex: 1;
   display: flex;
@@ -30,13 +31,13 @@
   gap: 0.75rem;
 }
 
-/* Логотип (тот же стиль, что avatarBox) */
 .avatarBox {
   background: var(--card-bg);
   border: 1px solid var(--border);
   border-radius: 6px;
   overflow: hidden;
 }
+
 .avatarBox img {
   display: block;
   width: 100%;
@@ -44,13 +45,13 @@
   object-fit: cover;
 }
 
-/* Карточка с основной информацией */
 .infoBox {
   background: var(--card-bg);
   border: 1px solid var(--border);
   border-radius: 6px;
   padding: 1rem;
 }
+
 .fullName {
   font-size: 1.25rem;
   font-weight: 600;
@@ -59,29 +60,18 @@
   line-height: 1.2;
 }
 
-.description {
-  font-size: 1rem;
-  color: var(--fg-secondary);
-  line-height: 1.5;
-  white-space: pre-wrap; /* вот это позволит рендерить \n как перенос строки */
-}
-
-/* Slug организации под названием */
 .slugText {
   font-size: 1rem;
   color: var(--fg-secondary);
-  margin: 0 0 0.75rem;
-  line-height: 1.4;
+  margin-bottom: 0.75rem;
 }
 
-/* Строка с владельцем */
 .ownerRow {
-  margin-top: 0.75rem;
   font-size: 0.9rem;
   color: var(--fg-secondary);
+  margin-bottom: 0.75rem;
 }
 
-/* Ссылка на профиль владельца */
 .ownerLink {
   color: var(--primary);
   text-decoration: none;
@@ -90,4 +80,29 @@
 
 .ownerLink:hover {
   text-decoration: underline;
+}
+
+.description {
+  font-size: 1rem;
+  color: var(--fg-secondary);
+  line-height: 1.5;
+  white-space: pre-wrap;
+}
+
+/* Кнопка удаления стала шириной 100% и более компактной по высоте */
+.deleteButton {
+  width: 100%;
+  padding: 0.6rem;
+  font-size: 1rem;
+  background: #e53e3e;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-top: 0.5rem;
+}
+
+.deleteButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }

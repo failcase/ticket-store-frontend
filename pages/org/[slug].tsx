@@ -2,15 +2,17 @@
 
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { useTranslation } from 'next-i18next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
+
 import Navbar from '@/components/Navbar'
 import profileStyles from '@/styles/Profile.module.css'
 import orgStyles from '@/styles/Organization.module.css'
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL!
 const DEFAULT_LOGO = '/default-logo.svg'
+const CONFIRM_SECONDS = 5
 
 interface OrgData {
   name: string
@@ -29,7 +31,13 @@ export default function OrgViewPage() {
   const [loading, setLoading] = useState(true)
   const [me, setMe] = useState<string | null>(null)
 
+  const [confirmingDelete, setConfirmingDelete] = useState(false)
+  const [confirmSeconds, setConfirmSeconds] = useState<number>(CONFIRM_SECONDS)
+  const [deleteDisabled, setDeleteDisabled] = useState(false)
+  const timerRef = useRef<NodeJS.Timeout>()
+
   useEffect(() => {
+    // достаём имя текущего пользователя из токена
     if (typeof window === 'undefined') return
     const token = localStorage.getItem('access')
     if (!token) return
@@ -48,6 +56,50 @@ export default function OrgViewPage() {
       .catch(() => setOrg(null))
       .finally(() => setLoading(false))
   }, [slug])
+
+  // Запускаем таймер обратного отсчёта при подтверждении удаления
+  useEffect(() => {
+    if (confirmingDelete && deleteDisabled) {
+      timerRef.current = setInterval(() => {
+        setConfirmSeconds(prev => {
+          if (prev <= 1) {
+            clearInterval(timerRef.current!)
+            setDeleteDisabled(false)
+            return 0
+          }
+          return prev - 1
+        })
+      }, 1000)
+    }
+    return () => clearInterval(timerRef.current!)
+  }, [confirmingDelete, deleteDisabled])
+
+  const handleDeleteClick = () => {
+    if (!confirmingDelete) {
+      // первый клик – переходим в режим подтверждения
+      setConfirmingDelete(true)
+      setConfirmSeconds(CONFIRM_SECONDS)
+      setDeleteDisabled(true)
+    } else {
+      // второй клик после отсчёта – отправляем DELETE
+      fetch(`${API_URL}/api/org/${slug}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${localStorage.getItem('access')}`,
+        },
+      })
+        .then(res => {
+          if (res.ok) router.push('/profile')
+          else {
+            // TODO: показывать ошибку удаления
+          }
+        })
+        .catch(() => {
+          // TODO: показывать сетевую ошибку
+        })
+    }
+  }
 
   if (loading) {
     return (
@@ -95,18 +147,33 @@ export default function OrgViewPage() {
               </Link>
             </div>
             <p className={orgStyles.description}>{org.description}</p>
+
             {isOwner && (
-              <button
-                className={profileStyles.editButton}
-                onClick={() => router.push(`/org/${org.slug}/edit`)}
-              >
-                {t('editOrganization')}
-              </button>
+              <>
+                <button
+                  className={profileStyles.editButton}
+                  onClick={() => router.push(`/org/${org.slug}/edit`)}
+                >
+                  {t('editOrganization')}
+                </button>
+
+                <button
+                  className={orgStyles.deleteButton}
+                  onClick={handleDeleteClick}
+                  disabled={deleteDisabled}
+                >
+                  {confirmingDelete
+                    ? confirmSeconds > 0
+                      ? `${t('confirmDeleteOrganization')} ${confirmSeconds}...`
+                      : t('confirmDeleteOrganization')
+                    : t('deleteOrganization')}
+                </button>
+              </>
             )}
           </div>
         </div>
         <div className={orgStyles.rightColumn}>
-          {/* TODO: участники, события и т.д. */}
+          {/* Здесь может быть список событий, участников и т.д. */}
         </div>
       </main>
     </>
