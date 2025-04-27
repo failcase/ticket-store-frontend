@@ -11,6 +11,16 @@ const nextConfig: NextConfig = {
     ...baseI18n,
     localeDetection: false, // ← только false
   },
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'http',
+        hostname: 'localhost',
+        port: '8000',
+        pathname: '/media/**',
+      },
+    ],
+  },
 };
 
 

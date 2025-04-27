@@ -1,57 +1,56 @@
 // components/Navbar.tsx
+import Link from 'next/link';
+import Image from 'next/image';
+import { useState, useEffect, useRef } from 'react';
+import { useTheme } from 'next-themes';
+import { useTranslation } from 'next-i18next';
+import styles from './Navbar.module.css';
+import { LanguageSwitcher } from './LanguageSwitcher';
+import { authFetch } from '@/utils/auth';
 
-import Link from 'next/link'
-import { useState, useEffect, useRef } from 'react'
-import { useTheme } from 'next-themes'
-import { useTranslation } from 'next-i18next'
-import styles from './Navbar.module.css'
-import { LanguageSwitcher } from './LanguageSwitcher'
-import { authFetch } from '@/utils/auth'
-
-const API_URL = process.env.NEXT_PUBLIC_API_URL!
+const API_URL = process.env.NEXT_PUBLIC_API_URL!;
 
 export default function Navbar() {
-  const { t } = useTranslation('common')
-  const { resolvedTheme, setTheme } = useTheme()
-  const [mounted, setMounted] = useState(false)
-  const [me, setMe] = useState<string | null>(null)
-  const [avatar, setAvatar] = useState<string>('/default-avatar.svg')
-  const [open, setOpen] = useState(false)
-  const menuRef = useRef<HTMLDivElement>(null)
+  const { t } = useTranslation('common');
+  const { resolvedTheme, setTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+  const [me, setMe] = useState<string | null>(null);
+  const [avatar, setAvatar] = useState<string>('/default-avatar.svg');
+  const [open, setOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => setMounted(true), [])
-
+  useEffect(() => setMounted(true), []);
   useEffect(() => {
-    if (typeof window === 'undefined') return
-    const token = localStorage.getItem('access')
-    if (!token) return
+    if (typeof window === 'undefined') return;
+    const token = localStorage.getItem('access');
+    if (!token) return;
     try {
-      const { username } = JSON.parse(atob(token.split('.')[1]))
-      setMe(username)
+      const { username } = JSON.parse(atob(token.split('.')[1]));
+      setMe(username);
       authFetch(`${API_URL}/api/users/${username}`)
-        .then(res => res.ok ? res.json() : Promise.reject())
-        .then(u => u.avatar && setAvatar(u.avatar))
-        .catch(() => {})
+        .then((res) => (res.ok ? res.json() : Promise.reject()))
+        .then((u) => u.avatar && setAvatar(u.avatar))
+        .catch(() => {});
     } catch {}
-  }, [])
+  }, []);
 
   useEffect(() => {
     const onClick = (e: MouseEvent) => {
       if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
-        setOpen(false)
+        setOpen(false);
       }
-    }
-    document.addEventListener('click', onClick)
-    return () => document.removeEventListener('click', onClick)
-  }, [])
+    };
+    document.addEventListener('click', onClick);
+    return () => document.removeEventListener('click', onClick);
+  }, []);
 
   const logout = () => {
-    localStorage.clear()
-    window.location.href = '/login'
-  }
+    localStorage.clear();
+    window.location.href = '/login';
+  };
 
   const ThemeButton = () => {
-    if (!mounted) return <button className={styles.themeToggle} aria-label={t('switchTheme')} />
+    if (!mounted) return <button className={styles.themeToggle} aria-label={t('switchTheme')} />;
     return (
       <button
         className={styles.themeToggle}
@@ -60,18 +59,16 @@ export default function Navbar() {
       >
         {resolvedTheme === 'light' ? '🌙' : '☀️'}
       </button>
-    )
-  }
+    );
+  };
 
   return (
     <nav className={styles.navbar}>
       <Link href="/" className={styles.logo}>
         {t('brand')}
       </Link>
-
       <div className={styles.links}>
         <LanguageSwitcher />
-
         {!me ? (
           <>
             <Link href="/login" className={styles.link}>
@@ -83,11 +80,13 @@ export default function Navbar() {
           </>
         ) : (
           <div className={styles.profileMenu} ref={menuRef}>
-            <img
+            <Image
               src={avatar}
               alt={t('avatarAlt')}
+              width={32}
+              height={32}
               className={styles.avatar}
-              onClick={() => setOpen(o => !o)}
+              onClick={() => setOpen((o) => !o)}
             />
             {open && (
               <div className={styles.dropdown}>
@@ -101,9 +100,8 @@ export default function Navbar() {
             )}
           </div>
         )}
-
         <ThemeButton />
       </div>
     </nav>
-  )
+  );
 }

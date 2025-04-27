@@ -1,85 +1,81 @@
 // pages/org/[slug].tsx
+import Link from 'next/link';
+import Image from 'next/image';
+import { useRouter } from 'next/router';
+import { useEffect, useState, useRef } from 'react';
+import { useTranslation } from 'next-i18next';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import Navbar from '@/components/Navbar';
+import profileStyles from '@/styles/Profile.module.css';
+import orgStyles from '@/styles/Organization.module.css';
 
-import Link from 'next/link'
-import { useRouter } from 'next/router'
-import { useEffect, useState, useRef } from 'react'
-import { useTranslation } from 'next-i18next'
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
-import Navbar from '@/components/Navbar'
-import profileStyles from '@/styles/Profile.module.css'
-import orgStyles from '@/styles/Organization.module.css'
-
-const API_URL = process.env.NEXT_PUBLIC_API_URL!
-const DEFAULT_LOGO = '/default-logo.svg'
-const CONFIRM_SECONDS = 3
+const API_URL = process.env.NEXT_PUBLIC_API_URL!;
+const DEFAULT_LOGO = '/default-logo.svg';
+const CONFIRM_SECONDS = 3;
 
 interface OrgData {
-  name: string
-  slug: string
-  description: string
-  logo?: string
-  owner: string
+  name: string;
+  slug: string;
+  description: string;
+  logo?: string;
+  owner: string;
 }
 
 export default function OrgViewPage() {
-  const { t } = useTranslation('common')
-  const router = useRouter()
-  const { slug } = router.query as { slug: string }
+  const { t } = useTranslation('common');
+  const router = useRouter();
+  const { slug } = router.query as { slug: string };
+  const [org, setOrg] = useState<OrgData | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [me, setMe] = useState<string | null>(null);
+  const [confirmingDelete, setConfirmingDelete] = useState(false);
+  const [confirmSeconds, setConfirmSeconds] = useState<number>(CONFIRM_SECONDS);
+  const [deleteDisabled, setDeleteDisabled] = useState(false);
+  const timerRef = useRef<NodeJS.Timeout | null>(null);
 
-  const [org, setOrg] = useState<OrgData | null>(null)
-  const [loading, setLoading] = useState(true)
-  const [me, setMe] = useState<string | null>(null)
-  const [confirmingDelete, setConfirmingDelete] = useState(false)
-  const [confirmSeconds, setConfirmSeconds] = useState<number>(CONFIRM_SECONDS)
-  const [deleteDisabled, setDeleteDisabled] = useState(false)
-  const timerRef = useRef<NodeJS.Timeout | null>(null)
-
-  // получаем текущего пользователя из токена
   useEffect(() => {
-    if (typeof window === 'undefined') return
-    const token = localStorage.getItem('access')
-    if (!token) return
+    if (typeof window === 'undefined') return;
+    const token = localStorage.getItem('access');
+    if (!token) return;
     try {
-      const { username } = JSON.parse(atob(token.split('.')[1]))
-      setMe(username as string)
+      const { username } = JSON.parse(atob(token.split('.')[1]));
+      setMe(username as string);
     } catch {}
-  }, [])
+  }, []);
 
-  // загружаем данные организации
   useEffect(() => {
-    if (!slug) return
-    setLoading(true)
+    if (!slug) return;
+    setLoading(true);
     fetch(`${API_URL}/api/org/${slug}`)
-      .then(res => res.ok ? res.json() : Promise.reject())
+      .then((res) => (res.ok ? res.json() : Promise.reject()))
       .then((data: OrgData) => setOrg(data))
       .catch(() => setOrg(null))
-      .finally(() => setLoading(false))
-  }, [slug])
+      .finally(() => setLoading(false));
+  }, [slug]);
 
-  // таймер подтверждения удаления
   useEffect(() => {
     if (confirmingDelete && deleteDisabled) {
       timerRef.current = setInterval(() => {
-        setConfirmSeconds(prev => {
+        setConfirmSeconds((prev) => {
           if (prev <= 1) {
-            if (timerRef.current) clearInterval(timerRef.current)
-            setDeleteDisabled(false)
-            return 0
+            if (timerRef.current) clearInterval(timerRef.current);
+            setDeleteDisabled(false);
+            return 0;
           }
-          return prev - 1
-        })
-      }, 1000)
+          return prev - 1;
+        });
+      }, 1000);
     }
     return () => {
-      if (timerRef.current) clearInterval(timerRef.current)
-    }
-  }, [confirmingDelete, deleteDisabled])
+      if (timerRef.current) clearInterval(timerRef.current);
+    };
+  }, [confirmingDelete, deleteDisabled]);
 
   const handleDeleteClick = () => {
     if (!confirmingDelete) {
-      setConfirmingDelete(true)
-      setConfirmSeconds(CONFIRM_SECONDS)
-      setDeleteDisabled(true)
+      setConfirmingDelete(true);
+      setConfirmSeconds(CONFIRM_SECONDS);
+      setDeleteDisabled(true);
     } else {
       fetch(`${API_URL}/api/org/${slug}`, {
         method: 'DELETE',
@@ -88,38 +84,34 @@ export default function OrgViewPage() {
           Authorization: `Bearer ${localStorage.getItem('access')}`,
         },
       })
-        .then(res => {
-          if (res.ok) router.push('/profile')
+        .then((res) => {
+          if (res.ok) router.push('/profile');
         })
         .catch(() => {
           // TODO: показывать ошибку
-        })
+        });
     }
-  }
+  };
 
   if (loading) {
     return (
       <>
         <Navbar />
-        <main style={{ padding: '2rem', textAlign: 'center' }}>
-          {t('loading')}
-        </main>
+        <main style={{ padding: '2rem', textAlign: 'center' }}>{t('loading')}</main>
       </>
-    )
+    );
   }
 
   if (!org) {
     return (
       <>
         <Navbar />
-        <main style={{ padding: '2rem', textAlign: 'center' }}>
-          {t('orgNotFound')}
-        </main>
+        <main style={{ padding: '2rem', textAlign: 'center' }}>{t('orgNotFound')}</main>
       </>
-    )
+    );
   }
 
-  const isOwner = me === org.owner
+  const isOwner = me === org.owner;
 
   return (
     <>
@@ -127,10 +119,15 @@ export default function OrgViewPage() {
       <main className={orgStyles.container}>
         <div className={orgStyles.leftColumn}>
           <div className={orgStyles.avatarBox}>
-            <img
+            <Image
               src={org.logo || DEFAULT_LOGO}
               alt={t('orgLogoAlt')}
-              onError={e => { e.currentTarget.src = DEFAULT_LOGO }}
+              width={278}
+              height={278}
+              unoptimized
+              onError={(e) => {
+                e.currentTarget.src = DEFAULT_LOGO;
+              }}
             />
           </div>
           <div className={orgStyles.infoBox}>
@@ -157,21 +154,19 @@ export default function OrgViewPage() {
                   disabled={deleteDisabled}
                 >
                   {confirmingDelete
-                    ? (confirmSeconds > 0
-                        ? `${t('confirmDeleteOrganization')} ${confirmSeconds}...`
-                        : t('confirmDeleteOrganization'))
+                    ? confirmSeconds > 0
+                      ? `${t('confirmDeleteOrganization')} ${confirmSeconds}...`
+                      : t('confirmDeleteOrganization')
                     : t('deleteOrganization')}
                 </button>
               </>
             )}
           </div>
         </div>
-        <div className={orgStyles.rightColumn}>
-          {/* Список событий, участников и т.д. */}
-        </div>
+        <div className={orgStyles.rightColumn}>{/* … */}</div>
       </main>
     </>
-  )
+  );
 }
 
 export async function getServerSideProps({ locale }: { locale: string }) {
@@ -179,5 +174,5 @@ export async function getServerSideProps({ locale }: { locale: string }) {
     props: {
       ...(await serverSideTranslations(locale, ['common'])),
     },
-  }
+  };
 }

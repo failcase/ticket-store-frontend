@@ -1,5 +1,6 @@
 // pages/org/[slug]/edit.tsx
 import { useState, useEffect, ChangeEvent, FormEvent } from 'react';
+import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
@@ -22,6 +23,7 @@ export default function OrgEditPage() {
   const { t } = useTranslation('common');
   const router = useRouter();
   const { slug } = router.query as { slug: string };
+
   const [org, setOrg] = useState<OrgData | null>(null);
   const [name, setName] = useState('');
   const [slugInput, setSlugInput] = useState('');
@@ -125,15 +127,23 @@ export default function OrgEditPage() {
       <main className={orgStyles.container}>
         <div className={orgStyles.leftColumn}>
           <label htmlFor="logo-upload" className={`${orgStyles.avatarBox} ${profileStyles.avatarBox}`}>
-            <img
+            <Image
               src={logoPreview || DEFAULT_LOGO}
               alt={t('orgLogoAlt')}
+              width={280}
+              height={280}
               onError={(e) => {
                 e.currentTarget.src = DEFAULT_LOGO;
               }}
             />
             <div className={profileStyles.avatarOverlay}>
-              <img src="/pencil.svg" alt={t('orgEditLogo')} className={profileStyles.avatarOverlayIcon} />
+              <Image
+                src="/pencil.svg"
+                alt={t('orgEditLogo')}
+                width={40}
+                height={40}
+                className={profileStyles.avatarOverlayIcon}
+              />
             </div>
           </label>
           <input
