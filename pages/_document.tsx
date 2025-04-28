@@ -1,9 +1,12 @@
+// pages/_document.tsx
 import { Html, Head, Main, NextScript } from "next/document";
 
 export default function Document() {
   return (
     <Html lang="en">
       <Head>
+        {/* Для адаптации на мобильных устройствах */}
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
         {/* Сразу ставим класс dark до рендера React */}
         <script
           dangerouslySetInnerHTML={{

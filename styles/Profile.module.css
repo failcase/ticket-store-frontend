@@ -9,11 +9,16 @@
   padding: 0 1.5rem;
   flex-wrap: wrap;
 }
+
 @media (max-width: 768px) {
   .container {
     flex-direction: column;
+    margin: 1rem auto;      /* немного меньше отступ сверху/снизу */
     gap: 0.5rem;
     padding: 0 1.5rem;
+  }
+  .leftColumn {
+    gap: 1rem;              /* чуть больше расстояние между блоками */
   }
 }
 
@@ -238,7 +243,7 @@
   border-radius: 6px;
 }
 
-.organizationsBlock h2 {
+.organorganizationsBlock h2 {
   margin: 0 0 0.75rem;
   font-size: 1.25rem;
   font-weight: 600;
@@ -256,7 +261,7 @@
 /* ——— элемент списка организаций ——— */
 .organizationItem {
   flex: 0 0 auto;
-  width: 96px;               /* было 80px, стало шире */
+  width: 96px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -264,8 +269,8 @@
 
 /* ——— лого организации ——— */
 .orgLogo {
-  width: 96px;               /* было 80px */
-  height: 96px;              /* было 80px */
+  width: 96px;
+  height: 96px;
   border-radius: 50%;
   object-fit: cover;
   background: var(--bg);
@@ -275,7 +280,7 @@
 /* ——— название организации ——— */
 .organizationName {
   margin-top: 0.5rem;
-  font-size: 1rem;           /* было 0.9rem, немного больше */
+  font-size: 1rem;
   font-weight: 500;
   color: var(--fg);
   text-align: center;
@@ -295,8 +300,53 @@
   cursor: pointer;
   transition: background 0.2s;
 }
-
 .createButton:hover {
   background: #24943f;
 }
 
+@media (max-width: 480px) {
+  .container {
+    padding: 0 1rem;
+    gap: 0.25rem;
+  }
+  .leftColumn,
+  .rightColumn {
+    gap: 0.5rem;
+  }
+  .avatarOverlayIcon {
+    width: 2rem;
+    height: 2rem;
+  }
+  .infoBox {
+    padding: 0.75rem;
+  }
+  .fullName {
+    font-size: 1.15rem;
+  }
+  .usernameText,
+  .emailRow,
+  .organizationName {
+    font-size: 0.95rem;
+  }
+  .editButton,
+  .backButton,
+  .profileForm button,
+  .passwordBox button,
+  .emailBox button,
+  .createButton {
+    padding: 0.45rem 0.8rem;
+    font-size: 0.9rem;
+  }
+  /* Сделать кнопку «Создать организацию» во всю ширину на мобильных */
+  .createButton {
+    display: block;
+    width: 100%;
+  }
+  .field label {
+    font-size: 0.85rem;
+  }
+  .field input,
+  .field textarea {
+    padding: 0.4rem;
+  }
+}

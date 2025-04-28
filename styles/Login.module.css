@@ -3,8 +3,7 @@
 .container {
   max-width: 400px;
   margin: 2rem auto;
-  /* вертикальные: 2rem сверху, 1rem снизу; горизонтальные: 1.5rem, как в профиле */
-  padding: 2rem 1rem 1rem; /* ранее было padding: 2rem; :contentReference[oaicite:2]{index=2}&#8203;:contentReference[oaicite:3]{index=3} */
+  padding: 2rem 1rem 1rem;
   background-color: var(--card-bg);
   border: 1px solid var(--border);
   border-radius: 6px;
@@ -75,4 +74,27 @@
 
 .link:hover {
   text-decoration: underline;
+}
+
+@media (max-width: 480px) {
+  .container {
+    margin: 1rem auto;
+    padding: 1.5rem 1rem 1rem;
+  }
+  .title {
+    font-size: 1.25rem;
+  }
+  .label {
+    font-size: 0.85rem;
+  }
+  .input {
+    padding: 0.4rem;
+  }
+  .submit {
+    padding: 0.5rem;
+    font-size: 0.9rem;
+  }
+  .footerText {
+    font-size: 0.85rem;
+  }
 }

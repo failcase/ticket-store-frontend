@@ -68,6 +68,7 @@ export default function Navbar() {
         {t('brand')}
       </Link>
       <div className={styles.links}>
+        <ThemeButton />
         <LanguageSwitcher />
         {!me ? (
           <>
@@ -100,7 +101,6 @@ export default function Navbar() {
             )}
           </div>
         )}
-        <ThemeButton />
       </div>
     </nav>
   );
