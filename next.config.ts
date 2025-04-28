@@ -19,6 +19,18 @@ const nextConfig: NextConfig = {
         port: '8000',
         pathname: '/media/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'api.ticket.failcase.dev',
+        port: '',
+        pathname: '/media/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'api.ticket.failcase.dev',
+        port: '',
+        pathname: '/static/**',
+      },
     ],
   },
 };
