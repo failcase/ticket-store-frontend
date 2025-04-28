@@ -14,22 +14,10 @@ const nextConfig: NextConfig = {
   images: {
     remotePatterns: [
       {
-        protocol: 'http',
-        hostname: 'localhost',
-        port: '8000',
-        pathname: '/media/**',
-      },
-      {
         protocol: 'https',
-        hostname: 'api.ticket.failcase.dev',
+        hostname: '**',
         port: '',
-        pathname: '/media/**',
-      },
-      {
-        protocol: 'https',
-        hostname: 'api.ticket.failcase.dev',
-        port: '',
-        pathname: '/static/**',
+        pathname: '**',
       },
     ],
   },
