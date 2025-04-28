@@ -13,12 +13,19 @@
 @media (max-width: 768px) {
   .container {
     flex-direction: column;
-    margin: 1rem auto;      /* немного меньше отступ сверху/снизу */
     gap: 0.5rem;
+    margin: 1rem auto;          /* снизили отступ сверху/снизу */
     padding: 0 1.5rem;
   }
+
+  /* Увеличили расстояние между аватаром и блоком информации */
   .leftColumn {
-    gap: 1rem;              /* чуть больше расстояние между блоками */
+    gap: 1rem;
+  }
+
+  /* Отступ под блоком основной информации перед «Организациями» */
+  .infoBox {
+    margin-bottom: 0.75rem;
   }
 }
 
@@ -29,6 +36,7 @@
   flex-direction: column;
   gap: 0.75rem;
 }
+
 .rightColumn {
   flex: 1;
   display: flex;
@@ -66,7 +74,6 @@
 .avatarBox:hover .avatarOverlay {
   opacity: 1;
 }
-/* Круглый фон + маска SVG */
 .avatarOverlayIcon {
   width: 2.5rem;
   height: 2.5rem;
@@ -140,13 +147,6 @@
   border-radius: 6px;
   padding: 1rem;
   margin-bottom: 0.75rem;
-}
-@media (max-width: 768px) {
-  .profileForm,
-  .passwordBox,
-  .emailBox {
-    padding: 0.75rem;
-  }
 }
 
 /* Заголовки форм */
@@ -242,8 +242,7 @@
   padding: 1rem;
   border-radius: 6px;
 }
-
-.organorganizationsBlock h2 {
+.organizationsBlock h2 {
   margin: 0 0 0.75rem;
   font-size: 1.25rem;
   font-weight: 600;
@@ -258,7 +257,7 @@
   padding-bottom: 0.5rem;
 }
 
-/* ——— элемент списка организаций ——— */
+/* Элемент списка организаций */
 .organizationItem {
   flex: 0 0 auto;
   width: 96px;
@@ -266,8 +265,6 @@
   flex-direction: column;
   align-items: center;
 }
-
-/* ——— лого организации ——— */
 .orgLogo {
   width: 96px;
   height: 96px;
@@ -276,8 +273,6 @@
   background: var(--bg);
   border: 1px solid var(--border);
 }
-
-/* ——— название организации ——— */
 .organizationName {
   margin-top: 0.5rem;
   font-size: 1rem;
@@ -309,6 +304,10 @@
     padding: 0 1rem;
     gap: 0.25rem;
   }
+  .infoBox {
+    margin-top: 0.25rem;
+    margin-bottom: 0.5rem;
+  }
   .leftColumn,
   .rightColumn {
     gap: 0.5rem;
@@ -316,9 +315,6 @@
   .avatarOverlayIcon {
     width: 2rem;
     height: 2rem;
-  }
-  .infoBox {
-    padding: 0.75rem;
   }
   .fullName {
     font-size: 1.15rem;
@@ -337,7 +333,6 @@
     padding: 0.45rem 0.8rem;
     font-size: 0.9rem;
   }
-  /* Сделать кнопку «Создать организацию» во всю ширину на мобильных */
   .createButton {
     display: block;
     width: 100%;
